@@ -488,15 +488,28 @@ function renderTarjeta(p) {
   const precio = p.p ? RD_Data.formatPrecio(p.p) : null;
   const waURL = RD_Data.buildWhatsAppURL('+34649903695', p.t, p.i);
 
+  // Placeholder con logo + nombre + ciudad del desguace.
+  // El nombre se muestra SIEMPRE porque no todos los logos de los CAT
+  // llevan el nombre integrado. Algunos socios mandarán logos solo
+  // simbólicos (escudos, símbolos) y otros no tendrán logo profesional.
+  const placeholder = `
+    <div class="card-placeholder">
+      <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo">
+      <div class="placeholder-name">ReciclaCAT</div>
+      <div class="placeholder-city">Sevilla · CAT</div>
+    </div>
+  `;
+
   const img = p.th
-    ? `<img src="${p.th}" alt="${escapar(p.t)}" loading="lazy" onerror="this.parentElement.classList.add('no-img'); this.remove();">`
+    ? `<img src="${p.th}" alt="${escapar(p.t)}" loading="lazy" onerror="reemplazaImgFallida(this)">`
     : '';
   const imgClass = p.th ? 'card-img' : 'card-img no-img';
+  const contenidoSinImagen = p.th ? '' : placeholder;
 
   return `
     <article class="card">
       <a href="pieza.html?id=${p.i}" class="card-img-link">
-        <div class="${imgClass}">${img}<span class="card-badge">CAT</span></div>
+        <div class="${imgClass}">${img}${contenidoSinImagen}<span class="card-badge">CAT</span></div>
       </a>
       <div class="card-info">
         <div class="card-cat">${capitalizar(p.f || '')}</div>
@@ -620,3 +633,25 @@ function escapar(s) {
   if (!s) return '';
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
+
+// Función global: cuando una imagen del CDN falla al cargar, esta función
+// reemplaza el <img> roto por el placeholder con el logo del desguace.
+// Se llama desde el onerror del img.
+window.reemplazaImgFallida = function(imgEl) {
+  const cont = imgEl.parentElement;
+  if (!cont) return;
+  cont.classList.add('no-img');
+  imgEl.remove();
+  if (!cont.querySelector('.card-placeholder')) {
+    const placeholder = document.createElement('div');
+    placeholder.className = 'card-placeholder';
+    placeholder.innerHTML = `
+      <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo">
+      <div class="placeholder-name">ReciclaCAT</div>
+      <div class="placeholder-city">Sevilla · CAT</div>
+    `;
+    const badge = cont.querySelector('.card-badge');
+    if (badge) cont.insertBefore(placeholder, badge);
+    else cont.appendChild(placeholder);
+  }
+};

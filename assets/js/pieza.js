@@ -36,12 +36,23 @@ function renderFicha(p) {
 
   // Galería
   let galleryHTML;
+  
+  // Placeholder con logo + nombre + tagline. El nombre se muestra SIEMPRE
+  // porque no todos los logos de los CAT llevan el nombre integrado.
+  const placeholderHTML = `
+    <div class="ficha-placeholder">
+      <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo-grande">
+      <div class="placeholder-name-grande">ReciclaCAT</div>
+      <div class="placeholder-city-grande">Sevilla · Centro Autorizado de Tratamiento</div>
+    </div>
+  `;
+  
   if (p.imgs && p.imgs.length > 0) {
     const mainImg = p.imgs[0];
     galleryHTML = `
       <div class="main-img" id="main-img">
         <img src="${mainImg}" alt="${escapar(p.articulo)}" id="main-img-tag"
-             onerror="this.parentElement.classList.add('no-img'); this.remove();">
+             onerror="reemplazaImgFichaFallida(this)">
         <span class="badge">CAT autorizado</span>
       </div>
       <div class="thumbs">
@@ -55,8 +66,8 @@ function renderFicha(p) {
     `;
   } else {
     galleryHTML = `
-      <div class="main-img no-img">
-        <span>Sin imagen disponible</span>
+      <div class="main-img no-img" id="main-img">
+        ${placeholderHTML}
         <span class="badge">CAT autorizado</span>
       </div>
     `;
@@ -161,3 +172,24 @@ function escapar(s) {
   if (!s) return '';
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
+
+// Función global: cuando la imagen principal de la ficha falla al cargar,
+// la reemplaza con el placeholder del logo del desguace.
+window.reemplazaImgFichaFallida = function(imgEl) {
+  const cont = imgEl.parentElement;
+  if (!cont) return;
+  cont.classList.add('no-img');
+  imgEl.remove();
+  if (!cont.querySelector('.ficha-placeholder')) {
+    const placeholder = document.createElement('div');
+    placeholder.className = 'ficha-placeholder';
+    placeholder.innerHTML = `
+      <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo-grande">
+      <div class="placeholder-name-grande">ReciclaCAT</div>
+      <div class="placeholder-city-grande">Sevilla · Centro Autorizado de Tratamiento</div>
+    `;
+    const badge = cont.querySelector('.badge');
+    if (badge) cont.insertBefore(placeholder, badge);
+    else cont.appendChild(placeholder);
+  }
+};
