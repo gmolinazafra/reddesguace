@@ -47,14 +47,38 @@ window.addEventListener('DOMContentLoaded', async () => {
     
     bindearEventos();
 
-    // Mostrar las piezas destacadas (home)
-    state.resultados = meta.home_piezas || [];
+    // Cargar TODO el catálogo desde el inicio (como en ReciclaCAT).
+    // Muestra spinner mientras descarga los 62 chunks de marca.
+    mostrarLoadingInicial(meta.total);
+    
+    state.todasLasPiezas = await RD_Data.loadAllMarcas((c, t) => {
+      const pct = Math.round((c / t) * 100);
+      actualizarProgresoInicial(pct, c, t);
+    });
+    
+    state.resultados = state.todasLasPiezas;
+    aplicarOrden();
     render();
   } catch (e) {
     console.error('Error inicializando:', e);
     document.getElementById('loading').innerHTML = '<p style="color:#c33;">Error al cargar el catálogo. Recarga la página.</p>';
   }
 });
+
+function mostrarLoadingInicial(total) {
+  const loadEl = document.getElementById('loading');
+  loadEl.style.display = 'block';
+  loadEl.innerHTML = `
+    <div class="spinner"></div>
+    <p>Cargando ${formatNum(total)} piezas del catálogo...</p>
+    <p id="progreso-inicial" style="font-size:12px; color:#888; margin-top:6px;">Preparando descarga...</p>
+  `;
+}
+
+function actualizarProgresoInicial(pct, cargadas, total) {
+  const el = document.getElementById('progreso-inicial');
+  if (el) el.textContent = `${pct}% (${cargadas} de ${total} marcas)`;
+}
 
 function renderizarStats(meta) {
   document.getElementById('stat-piezas').textContent = formatNum(meta.total);
@@ -288,45 +312,30 @@ async function onCambioAno() {
 // =====================================================
 async function aplicarBusqueda() {
   state.pagina = 1;
-  mostrarLoading();
 
   try {
-    let piezas;
-    if (state.filtros.marcas.size > 0) {
-      // Cargar solo los chunks de las marcas seleccionadas
-      piezas = [];
-      const slugs = [];
-      for (const m of datosOriginales.marca) {
-        if (state.filtros.marcas.has(m.n)) slugs.push(m.s);
-      }
-      for (const slug of slugs) {
-        const data = await RD_Data.loadMarca(slug);
-        piezas = piezas.concat(data);
-      }
-    } else if (state.filtros.busqueda || state.filtros.familias.size > 0 || state.filtros.anoDesde || state.filtros.anoHasta) {
-      // Filtrado global → necesitamos todas las piezas
-      piezas = await cargarTodasLasPiezas();
-    } else {
-      // Sin filtros: mostrar destacadas
-      state.resultados = state.meta.home_piezas || [];
-      render();
-      return;
-    }
+    // Siempre filtramos sobre la lista completa (cargada al inicio)
+    const piezas = state.todasLasPiezas;
 
-    // Aplicar filtros adicionales
-    state.resultados = piezas.filter(p => {
-      if (state.filtros.familias.size > 0 && !state.filtros.familias.has(p.f)) return false;
-      if (state.filtros.modelos.size > 0 && !state.filtros.modelos.has(p.mo)) return false;
-      if (state.filtros.anoDesde && p.af && p.af < state.filtros.anoDesde) return false;
-      if (state.filtros.anoHasta && p.ai && p.ai > state.filtros.anoHasta) return false;
-      if (state.filtros.busqueda) {
-        const q = state.filtros.busqueda;
-        const campos = [p.t, p.m, p.mo, p.mt, p.f, p.i, p.rv, p.rc];
-        const texto = campos.filter(Boolean).join(' ').toLowerCase();
-        if (!texto.includes(q)) return false;
-      }
-      return true;
-    });
+    if (!hayFiltrosActivos()) {
+      // Sin filtros: mostrar todas las piezas
+      state.resultados = piezas;
+    } else {
+      state.resultados = piezas.filter(p => {
+        if (state.filtros.familias.size > 0 && !state.filtros.familias.has(p.f)) return false;
+        if (state.filtros.marcas.size > 0 && !state.filtros.marcas.has(p.m)) return false;
+        if (state.filtros.modelos.size > 0 && !state.filtros.modelos.has(p.mo)) return false;
+        if (state.filtros.anoDesde && p.af && p.af < state.filtros.anoDesde) return false;
+        if (state.filtros.anoHasta && p.ai && p.ai > state.filtros.anoHasta) return false;
+        if (state.filtros.busqueda) {
+          const q = state.filtros.busqueda;
+          const campos = [p.t, p.m, p.mo, p.mt, p.f, p.i, p.rv, p.rc];
+          const texto = campos.filter(Boolean).join(' ').toLowerCase();
+          if (!texto.includes(q)) return false;
+        }
+        return true;
+      });
+    }
 
     aplicarOrden();
     render();
@@ -335,21 +344,18 @@ async function aplicarBusqueda() {
   }
 }
 
+function hayFiltrosActivos() {
+  return state.filtros.familias.size > 0
+      || state.filtros.marcas.size > 0
+      || state.filtros.modelos.size > 0
+      || state.filtros.anoDesde
+      || state.filtros.anoHasta
+      || state.filtros.busqueda;
+}
+
 async function cargarTodasLasPiezas() {
-  if (state.todasLasPiezas.length > 0) return state.todasLasPiezas;
-  state.cargandoTodo = true;
-  const loadEl = document.getElementById('loading');
-  loadEl.innerHTML = `
-    <div class="spinner"></div>
-    <p>Cargando catálogo completo...</p>
-    <p id="progreso" style="font-size:12px; color:#888; margin-top:6px;">0%</p>
-  `;
-  state.todasLasPiezas = await RD_Data.loadAllMarcas((c, t) => {
-    const pct = Math.round((c / t) * 100);
-    const progEl = document.getElementById('progreso');
-    if (progEl) progEl.textContent = `${pct}% (${c}/${t} marcas)`;
-  });
-  state.cargandoTodo = false;
+  // Función obsoleta — ahora se carga todo al inicio.
+  // Se mantiene por si algún código viejo la referencia.
   return state.todasLasPiezas;
 }
 
