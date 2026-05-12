@@ -100,6 +100,7 @@ def procesar(csv_path, out_dir='data'):
     fichas_chunks = defaultdict(dict)
     familias = Counter()
     marcas = Counter()
+    modelos_por_marca = defaultdict(Counter)   # marca -> {modelo: count}
     total = 0
     con_imagen = 0
     home_piezas = []
@@ -118,6 +119,10 @@ def procesar(csv_path, out_dir='data'):
             modelo = row['modelo'].strip()
             articulo = row['articulo'].strip()
             
+            # Registrar modelo asociado a marca (para dropdown dinámico)
+            if marca and modelo:
+                modelos_por_marca[marca][modelo] += 1
+            
             # ---- PARSEO ÚNICO: usar siempre las MISMAS funciones ----
             precio = parsear_precio(row.get('precio'))
             ano_inicio = parsear_entero(row.get('modeloinicio'))
@@ -132,12 +137,22 @@ def procesar(csv_path, out_dir='data'):
             if marca: marcas[marca] += 1
             
             # ---- LISTADO: estructura compacta ----
+            # Campos incluidos para BÚSQUEDA: marca, modelo, motor, refid,
+            # refvisual, refcatalogo, familia y artículo. Se buscan por
+            # texto libre desde el buscador del hero.
+            motor = row.get('motorversion', '').strip() or None
+            refvisual = row.get('refvisual', '').strip() or None
+            refcatalogo = row.get('refcatalogo', '').strip() or None
+            
             entrada_listado = {
                 'i': refid,
                 't': articulo,
                 'f': familia,
                 'm': marca,
                 'mo': modelo,
+                'mt': motor,          # ← Motor (M57TU, K4M782, etc.)
+                'rv': refvisual,      # ← Ref. visual
+                'rc': refcatalogo,    # ← Ref. catálogo
                 'p': precio,            # ← MISMO precio que la ficha
                 'ai': ano_inicio,
                 'af': ano_fin,
@@ -216,6 +231,16 @@ def procesar(csv_path, out_dir='data'):
         escribir_json_atomico(out_dir / 'piezas' / f'{chunk_id:02d}.json', fichas)
 
     # meta.json AL FINAL: si llegamos aquí, todo lo demás está escrito
+    # Limitamos a top-30 modelos por marca para que meta no crezca demasiado.
+    # Si un socio busca un modelo poco común que no está en el top-30,
+    # puede usar el buscador libre del hero.
+    modelos_meta = {}
+    for marca, contador in modelos_por_marca.items():
+        top_modelos = contador.most_common(30)
+        modelos_meta[slug(marca)] = [
+            {'n': m, 'c': c} for m, c in top_modelos
+        ]
+
     meta = {
         'buildId': build_id,
         'csvHash': csv_hash,
@@ -224,6 +249,7 @@ def procesar(csv_path, out_dir='data'):
         'con_imagen': con_imagen,
         'familias': [{'n': f, 'c': c, 's': slug(f)} for f, c in familias.most_common()],
         'marcas': [{'n': m, 'c': c, 's': slug(m)} for m, c in marcas.most_common()],
+        'modelos': modelos_meta,
         'desguace': {
             'nombre': 'ReciclaCAT',
             'ciudad': 'Sevilla',

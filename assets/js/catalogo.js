@@ -1,23 +1,33 @@
 /* =====================================================
    RED DESGUACE · CATÁLOGO
-   Lógica de búsqueda, filtros y paginación
+   Lógica de búsqueda, filtros (dropdowns horizontales) y paginación
    ===================================================== */
 
 const ITEMS_POR_PAGINA = 24;
 
 const state = {
-  todasLasPiezas: [],      // todas cargadas (se llena al primer filtrado o búsqueda)
+  todasLasPiezas: [],      // todas cargadas (se llena al primer filtrado/búsqueda)
   resultados: [],          // resultados filtrados actuales
   pagina: 1,
   filtros: {
     familias: new Set(),
-    marcas: new Set(),
+    marcas: new Set(),     // valores: nombre de marca en mayúsculas
+    modelos: new Set(),    // valores: nombre de modelo exacto
     anoDesde: null,
     anoHasta: null,
     busqueda: ''
   },
   orden: 'relevancia',
-  cargandoTodo: false
+  cargandoTodo: false,
+  meta: null,
+  dropdownAbierto: null    // 'familia' | 'marca' | 'modelo' | 'ano' | 'desguace' | null
+};
+
+// Datos originales de cada filtro (para búsqueda dentro del dropdown)
+const datosOriginales = {
+  familia: [],
+  marca: [],
+  modelo: []
 };
 
 // =====================================================
@@ -26,9 +36,15 @@ const state = {
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     const meta = await RD_Data.loadMeta();
+    state.meta = meta;
     renderizarStats(meta);
-    renderizarFiltrosFamilia(meta.familias);
-    renderizarFiltrosMarca(meta.marcas);
+    
+    datosOriginales.familia = meta.familias || [];
+    datosOriginales.marca = meta.marcas || [];
+    
+    renderOpcionesFamilia(datosOriginales.familia);
+    renderOpcionesMarca(datosOriginales.marca);
+    
     bindearEventos();
 
     // Mostrar las piezas destacadas (home)
@@ -40,48 +56,191 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// =====================================================
-// RENDERIZADO INICIAL
-// =====================================================
 function renderizarStats(meta) {
   document.getElementById('stat-piezas').textContent = formatNum(meta.total);
-  // Calcular modelos únicos aproximados (1 por marca tenemos los más comunes)
   document.getElementById('stat-modelos').textContent = '+1.200';
 }
 
-function renderizarFiltrosFamilia(familias) {
-  const cont = document.getElementById('filtros-familia');
-  cont.innerHTML = familias.slice(0, 14).map(f => `
+// =====================================================
+// RENDERIZADO DE OPCIONES EN LOS DROPDOWNS
+// =====================================================
+function renderOpcionesFamilia(familias) {
+  const cont = document.getElementById('opciones-familia');
+  if (familias.length === 0) {
+    cont.innerHTML = '<div class="empty-state">No se encontró ninguna familia</div>';
+    return;
+  }
+  cont.innerHTML = familias.map(f => `
     <label>
-      <input type="checkbox" value="${f.n}" data-tipo="familia">
-      ${capitalizar(f.n)}
+      <input type="checkbox" value="${escapar(f.n)}" data-tipo="familia" 
+             ${state.filtros.familias.has(f.n) ? 'checked' : ''}>
+      <span>${capitalizar(f.n)}</span>
       <span class="cnt">${formatNum(f.c)}</span>
     </label>
   `).join('');
+  // Re-bindear eventos
+  cont.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', onFiltroCambio);
+  });
 }
 
-function renderizarFiltrosMarca(marcas) {
-  const cont = document.getElementById('filtros-marca');
+function renderOpcionesMarca(marcas) {
+  const cont = document.getElementById('opciones-marca');
+  if (marcas.length === 0) {
+    cont.innerHTML = '<div class="empty-state">No se encontró ninguna marca</div>';
+    return;
+  }
   cont.innerHTML = marcas.map(m => `
     <label>
-      <input type="checkbox" value="${m.n}" data-slug="${m.s}" data-tipo="marca">
-      ${capitalizar(m.n)}
+      <input type="checkbox" value="${escapar(m.n)}" data-slug="${m.s}" data-tipo="marca"
+             ${state.filtros.marcas.has(m.n) ? 'checked' : ''}>
+      <span>${capitalizar(m.n)}</span>
       <span class="cnt">${formatNum(m.c)}</span>
     </label>
   `).join('');
-}
-
-function bindearEventos() {
-  // Cambios en checkboxes
-  document.querySelectorAll('input[type="checkbox"][data-tipo]').forEach(cb => {
+  cont.querySelectorAll('input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('change', onFiltroCambio);
   });
+}
 
-  // Rango de años
-  document.getElementById('ano-desde').addEventListener('change', onFiltroCambio);
-  document.getElementById('ano-hasta').addEventListener('change', onFiltroCambio);
+function renderOpcionesModelo(modelos) {
+  const cont = document.getElementById('opciones-modelo');
+  if (!modelos || modelos.length === 0) {
+    cont.innerHTML = '<div class="empty-state">Selecciona una marca primero</div>';
+    return;
+  }
+  cont.innerHTML = modelos.map(m => `
+    <label>
+      <input type="checkbox" value="${escapar(m.n)}" data-tipo="modelo"
+             ${state.filtros.modelos.has(m.n) ? 'checked' : ''}>
+      <span>${escapar(m.n)}</span>
+      <span class="cnt">${formatNum(m.c)}</span>
+    </label>
+  `).join('');
+  cont.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', onFiltroCambio);
+  });
+}
 
-  // Búsqueda con debounce
+// Recalcula los modelos disponibles según las marcas seleccionadas.
+// Si no hay marcas → dropdown deshabilitado.
+function actualizarModeloDropdown() {
+  const dropdown = document.getElementById('filter-modelo');
+  const btn = dropdown.querySelector('.filter-btn');
+  
+  if (state.filtros.marcas.size === 0) {
+    dropdown.classList.add('disabled');
+    btn.disabled = true;
+    // Si tenía modelos seleccionados los limpiamos al desactivar
+    if (state.filtros.modelos.size > 0) {
+      state.filtros.modelos.clear();
+    }
+    datosOriginales.modelo = [];
+    renderOpcionesModelo([]);
+    return;
+  }
+  
+  dropdown.classList.remove('disabled');
+  btn.disabled = false;
+  
+  // Reunir los modelos de todas las marcas seleccionadas
+  const modelosUnificados = [];
+  const vistos = new Set();
+  
+  for (const marcaNombre of state.filtros.marcas) {
+    // Buscar el slug de la marca
+    const marca = datosOriginales.marca.find(m => m.n === marcaNombre);
+    if (!marca) continue;
+    const modelosMarca = (state.meta.modelos && state.meta.modelos[marca.s]) || [];
+    for (const mod of modelosMarca) {
+      // Si dos marcas comparten el mismo nombre de modelo, sumamos contadores
+      if (vistos.has(mod.n)) {
+        const existente = modelosUnificados.find(x => x.n === mod.n);
+        existente.c += mod.c;
+      } else {
+        vistos.add(mod.n);
+        modelosUnificados.push({ n: mod.n, c: mod.c });
+      }
+    }
+  }
+  
+  // Ordenar por contador descendente
+  modelosUnificados.sort((a, b) => b.c - a.c);
+  
+  // Limpiar modelos seleccionados que ya no estén disponibles
+  for (const m of Array.from(state.filtros.modelos)) {
+    if (!vistos.has(m)) state.filtros.modelos.delete(m);
+  }
+  
+  datosOriginales.modelo = modelosUnificados;
+  renderOpcionesModelo(modelosUnificados);
+}
+
+// =====================================================
+// DROPDOWNS: abrir, cerrar, buscar dentro
+// =====================================================
+function toggleDropdown(tipo) {
+  const dropdown = document.querySelector(`.filter-dropdown[data-filter="${tipo}"]`);
+  if (!dropdown) return;
+  if (dropdown.classList.contains('disabled')) return;
+  
+  if (state.dropdownAbierto === tipo) {
+    cerrarTodosDropdowns();
+  } else {
+    cerrarTodosDropdowns();
+    dropdown.classList.add('open');
+    state.dropdownAbierto = tipo;
+    document.getElementById('dropdowns-overlay').classList.add('active');
+    
+    // Si es modelo, refrescar opciones por si cambiaron las marcas
+    if (tipo === 'modelo') {
+      actualizarModeloDropdown();
+    }
+    
+    // Auto-focus en el campo de búsqueda si tiene
+    const search = dropdown.querySelector('.filter-search');
+    if (search) {
+      setTimeout(() => search.focus(), 50);
+    }
+  }
+}
+
+function cerrarTodosDropdowns() {
+  document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.remove('open'));
+  document.getElementById('dropdowns-overlay').classList.remove('active');
+  state.dropdownAbierto = null;
+  // Limpiar campos de búsqueda al cerrar
+  document.querySelectorAll('.filter-search').forEach(s => s.value = '');
+  // Restaurar todas las opciones
+  renderOpcionesFamilia(datosOriginales.familia);
+  renderOpcionesMarca(datosOriginales.marca);
+}
+
+function filtrarOpciones(tipo, query) {
+  const q = query.trim().toLowerCase();
+  if (tipo === 'familia') {
+    const filtradas = q
+      ? datosOriginales.familia.filter(f => f.n.toLowerCase().includes(q))
+      : datosOriginales.familia;
+    renderOpcionesFamilia(filtradas);
+  } else if (tipo === 'marca') {
+    const filtradas = q
+      ? datosOriginales.marca.filter(m => m.n.toLowerCase().includes(q))
+      : datosOriginales.marca;
+    renderOpcionesMarca(filtradas);
+  } else if (tipo === 'modelo') {
+    const filtradas = q
+      ? datosOriginales.modelo.filter(m => m.n.toLowerCase().includes(q))
+      : datosOriginales.modelo;
+    renderOpcionesModelo(filtradas);
+  }
+}
+
+// =====================================================
+// EVENTOS DE CAMBIO EN FILTROS
+// =====================================================
+function bindearEventos() {
+  // Búsqueda en el hero con debounce
   let timeout;
   document.getElementById('busqueda').addEventListener('input', (e) => {
     clearTimeout(timeout);
@@ -90,38 +249,56 @@ function bindearEventos() {
       aplicarBusqueda();
     }, 300);
   });
+  
+  // Tecla Escape cierra dropdowns
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarTodosDropdowns();
+  });
 }
 
-// =====================================================
-// MANEJO DE FILTROS
-// =====================================================
 async function onFiltroCambio(e) {
   const cb = e.target;
-  if (cb.dataset.tipo === 'familia') {
-    if (cb.checked) state.filtros.familias.add(cb.value);
-    else state.filtros.familias.delete(cb.value);
-  } else if (cb.dataset.tipo === 'marca') {
-    if (cb.checked) state.filtros.marcas.add(cb.value);
-    else state.filtros.marcas.delete(cb.value);
+  const tipo = cb.dataset.tipo;
+  const valor = cb.value;
+  
+  if (tipo === 'familia') {
+    if (cb.checked) state.filtros.familias.add(valor);
+    else state.filtros.familias.delete(valor);
+  } else if (tipo === 'marca') {
+    if (cb.checked) state.filtros.marcas.add(valor);
+    else state.filtros.marcas.delete(valor);
+    // Cambió la marca → refrescar dropdown de modelo
+    actualizarModeloDropdown();
+  } else if (tipo === 'modelo') {
+    if (cb.checked) state.filtros.modelos.add(valor);
+    else state.filtros.modelos.delete(valor);
   }
-
-  state.filtros.anoDesde = parseInt(document.getElementById('ano-desde').value) || null;
-  state.filtros.anoHasta = parseInt(document.getElementById('ano-hasta').value) || null;
 
   await aplicarBusqueda();
 }
 
+async function onCambioAno() {
+  state.filtros.anoDesde = parseInt(document.getElementById('ano-desde').value) || null;
+  state.filtros.anoHasta = parseInt(document.getElementById('ano-hasta').value) || null;
+  await aplicarBusqueda();
+}
+
+// =====================================================
+// APLICAR FILTROS
+// =====================================================
 async function aplicarBusqueda() {
   state.pagina = 1;
   mostrarLoading();
 
   try {
-    // Si hay marcas seleccionadas, solo cargamos esas
     let piezas;
     if (state.filtros.marcas.size > 0) {
+      // Cargar solo los chunks de las marcas seleccionadas
       piezas = [];
-      const slugs = Array.from(document.querySelectorAll('input[data-tipo="marca"]:checked'))
-        .map(cb => cb.dataset.slug);
+      const slugs = [];
+      for (const m of datosOriginales.marca) {
+        if (state.filtros.marcas.has(m.n)) slugs.push(m.s);
+      }
       for (const slug of slugs) {
         const data = await RD_Data.loadMarca(slug);
         piezas = piezas.concat(data);
@@ -131,23 +308,21 @@ async function aplicarBusqueda() {
       piezas = await cargarTodasLasPiezas();
     } else {
       // Sin filtros: mostrar destacadas
-      const meta = await RD_Data.loadMeta();
-      state.resultados = meta.home_piezas || [];
+      state.resultados = state.meta.home_piezas || [];
       render();
       return;
     }
 
     // Aplicar filtros adicionales
     state.resultados = piezas.filter(p => {
-      // Familia
       if (state.filtros.familias.size > 0 && !state.filtros.familias.has(p.f)) return false;
-      // Año
+      if (state.filtros.modelos.size > 0 && !state.filtros.modelos.has(p.mo)) return false;
       if (state.filtros.anoDesde && p.af && p.af < state.filtros.anoDesde) return false;
       if (state.filtros.anoHasta && p.ai && p.ai > state.filtros.anoHasta) return false;
-      // Búsqueda libre
       if (state.filtros.busqueda) {
         const q = state.filtros.busqueda;
-        const texto = `${p.t} ${p.m} ${p.mo} ${p.f} ${p.i}`.toLowerCase();
+        const campos = [p.t, p.m, p.mo, p.mt, p.f, p.i, p.rv, p.rc];
+        const texto = campos.filter(Boolean).join(' ').toLowerCase();
         if (!texto.includes(q)) return false;
       }
       return true;
@@ -162,7 +337,6 @@ async function aplicarBusqueda() {
 
 async function cargarTodasLasPiezas() {
   if (state.todasLasPiezas.length > 0) return state.todasLasPiezas;
-
   state.cargandoTodo = true;
   const loadEl = document.getElementById('loading');
   loadEl.innerHTML = `
@@ -170,13 +344,11 @@ async function cargarTodasLasPiezas() {
     <p>Cargando catálogo completo...</p>
     <p id="progreso" style="font-size:12px; color:#888; margin-top:6px;">0%</p>
   `;
-
   state.todasLasPiezas = await RD_Data.loadAllMarcas((c, t) => {
     const pct = Math.round((c / t) * 100);
     const progEl = document.getElementById('progreso');
     if (progEl) progEl.textContent = `${pct}% (${c}/${t} marcas)`;
   });
-
   state.cargandoTodo = false;
   return state.todasLasPiezas;
 }
@@ -200,13 +372,47 @@ function reordenar() {
 function limpiarFiltros() {
   state.filtros.familias.clear();
   state.filtros.marcas.clear();
+  state.filtros.modelos.clear();
   state.filtros.anoDesde = null;
   state.filtros.anoHasta = null;
   state.filtros.busqueda = '';
-  document.querySelectorAll('input[type="checkbox"][data-tipo]').forEach(cb => cb.checked = false);
+  
   document.getElementById('ano-desde').value = '';
   document.getElementById('ano-hasta').value = '';
   document.getElementById('busqueda').value = '';
+  
+  renderOpcionesFamilia(datosOriginales.familia);
+  renderOpcionesMarca(datosOriginales.marca);
+  actualizarModeloDropdown();
+  cerrarTodosDropdowns();
+  
+  aplicarBusqueda();
+}
+
+// Quitar un filtro individual desde un chip
+function quitarFiltro(tipo, valor) {
+  if (tipo === 'familia') state.filtros.familias.delete(valor);
+  else if (tipo === 'marca') {
+    state.filtros.marcas.delete(valor);
+    actualizarModeloDropdown();
+  }
+  else if (tipo === 'modelo') state.filtros.modelos.delete(valor);
+  else if (tipo === 'ano') {
+    state.filtros.anoDesde = null;
+    state.filtros.anoHasta = null;
+    document.getElementById('ano-desde').value = '';
+    document.getElementById('ano-hasta').value = '';
+  }
+  else if (tipo === 'busqueda') {
+    state.filtros.busqueda = '';
+    document.getElementById('busqueda').value = '';
+  }
+  
+  // Refrescar visualmente las opciones para que se desmarquen
+  renderOpcionesFamilia(datosOriginales.familia);
+  renderOpcionesMarca(datosOriginales.marca);
+  if (datosOriginales.modelo.length > 0) renderOpcionesModelo(datosOriginales.modelo);
+  
   aplicarBusqueda();
 }
 
@@ -231,7 +437,7 @@ function paginaAnterior() {
 }
 
 // =====================================================
-// RENDERIZADO DE RESULTADOS
+// RENDERIZADO
 // =====================================================
 function render() {
   ocultarLoading();
@@ -239,9 +445,10 @@ function render() {
   const empty = document.getElementById('empty');
   const pag = document.getElementById('paginacion');
 
-  // Actualizar contador
   document.getElementById('count-resultados').textContent = formatNum(state.resultados.length);
-  renderFiltrosActivos();
+  renderChipsActivos();
+  actualizarBadges();
+  actualizarBotonLimpiar();
 
   if (state.resultados.length === 0) {
     grid.style.display = 'none';
@@ -253,14 +460,12 @@ function render() {
   empty.style.display = 'none';
   grid.style.display = 'grid';
 
-  // Página actual
   const inicio = (state.pagina - 1) * ITEMS_POR_PAGINA;
   const fin = inicio + ITEMS_POR_PAGINA;
   const pageItems = state.resultados.slice(inicio, fin);
 
   grid.innerHTML = pageItems.map(renderTarjeta).join('');
 
-  // Paginación
   const totalPag = Math.ceil(state.resultados.length / ITEMS_POR_PAGINA);
   if (totalPag > 1) {
     pag.style.display = 'flex';
@@ -281,12 +486,11 @@ function renderTarjeta(p) {
     ? `<img src="${p.th}" alt="${escapar(p.t)}" loading="lazy" onerror="this.parentElement.classList.add('no-img'); this.remove();">`
     : '';
   const imgClass = p.th ? 'card-img' : 'card-img no-img';
-  const badge = `<span class="card-badge">CAT</span>`;
 
   return `
     <article class="card">
       <a href="pieza.html?id=${p.i}" class="card-img-link">
-        <div class="${imgClass}">${img}${badge}</div>
+        <div class="${imgClass}">${img}<span class="card-badge">CAT</span></div>
       </a>
       <div class="card-info">
         <div class="card-cat">${capitalizar(p.f || '')}</div>
@@ -304,27 +508,83 @@ function renderTarjeta(p) {
         </div>
       </div>
       <a href="${waURL}" class="card-wa" target="_blank" rel="noopener" onclick="event.stopPropagation();">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
         Pedir por WhatsApp
       </a>
     </article>
   `;
 }
 
-function renderFiltrosActivos() {
-  const tags = [];
-  if (state.filtros.busqueda) tags.push(`«${state.filtros.busqueda}»`);
-  if (state.filtros.familias.size > 0) tags.push(`${state.filtros.familias.size} familias`);
-  if (state.filtros.marcas.size > 0) tags.push(`${state.filtros.marcas.size} marcas`);
-  if (state.filtros.anoDesde || state.filtros.anoHasta) {
-    tags.push(`${state.filtros.anoDesde || '?'}–${state.filtros.anoHasta || '?'}`);
-  }
-  document.getElementById('filtros-activos').textContent = tags.length
-    ? '· ' + tags.join(' · ')
-    : '';
+// =====================================================
+// CHIPS DE FILTROS ACTIVOS
+// =====================================================
+function renderChipsActivos() {
+  const chips = [];
   
-  // Actualizar también el badge del botón móvil
-  actualizarBadgeFiltros();
+  if (state.filtros.busqueda) {
+    chips.push(crearChip('busqueda', state.filtros.busqueda, `«${state.filtros.busqueda}»`));
+  }
+  for (const f of state.filtros.familias) {
+    chips.push(crearChip('familia', f, capitalizar(f)));
+  }
+  for (const m of state.filtros.marcas) {
+    chips.push(crearChip('marca', m, capitalizar(m)));
+  }
+  for (const mo of state.filtros.modelos) {
+    chips.push(crearChip('modelo', mo, mo));
+  }
+  if (state.filtros.anoDesde || state.filtros.anoHasta) {
+    const txt = `${state.filtros.anoDesde || '?'}–${state.filtros.anoHasta || '?'}`;
+    chips.push(crearChip('ano', 'all', txt));
+  }
+  
+  const cont = document.getElementById('chips-activos');
+  cont.innerHTML = chips.join('');
+}
+
+function crearChip(tipo, valor, etiqueta) {
+  return `
+    <span class="chip">
+      ${escapar(etiqueta)}
+      <span class="chip-x" onclick="quitarFiltro('${tipo}', ${JSON.stringify(valor)})" title="Quitar filtro">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </span>
+  `;
+}
+
+// =====================================================
+// BADGES Y BOTÓN LIMPIAR
+// =====================================================
+function actualizarBadges() {
+  const setBadge = (id, n, dropdownId) => {
+    const badge = document.getElementById(id);
+    if (!badge) return;
+    if (n > 0) {
+      badge.textContent = n;
+      badge.style.display = 'inline-block';
+      // Marcar el dropdown como con selección
+      document.querySelector(`.filter-dropdown[data-filter="${dropdownId}"]`)?.classList.add('has-selection');
+    } else {
+      badge.style.display = 'none';
+      document.querySelector(`.filter-dropdown[data-filter="${dropdownId}"]`)?.classList.remove('has-selection');
+    }
+  };
+  setBadge('badge-familia', state.filtros.familias.size, 'familia');
+  setBadge('badge-marca', state.filtros.marcas.size, 'marca');
+  setBadge('badge-modelo', state.filtros.modelos.size, 'modelo');
+  const anoCount = (state.filtros.anoDesde ? 1 : 0) + (state.filtros.anoHasta ? 1 : 0);
+  setBadge('badge-ano', anoCount, 'ano');
+}
+
+function actualizarBotonLimpiar() {
+  const hayFiltros = state.filtros.familias.size > 0
+                  || state.filtros.marcas.size > 0
+                  || state.filtros.modelos.size > 0
+                  || state.filtros.anoDesde
+                  || state.filtros.anoHasta
+                  || state.filtros.busqueda;
+  document.getElementById('btn-limpiar').style.display = hayFiltros ? 'inline-flex' : 'none';
 }
 
 // =====================================================
@@ -352,41 +612,5 @@ function capitalizar(s) {
 
 function escapar(s) {
   if (!s) return '';
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
-
-// =====================================================
-// PANEL FILTROS MÓVIL
-// =====================================================
-function abrirFiltrosMobile() {
-  document.getElementById('filters').classList.add('open');
-  document.getElementById('filters-overlay').classList.add('open');
-  document.body.classList.add('filters-open');
-}
-
-function cerrarFiltrosMobile() {
-  document.getElementById('filters').classList.remove('open');
-  document.getElementById('filters-overlay').classList.remove('open');
-  document.body.classList.remove('filters-open');
-}
-
-// Actualiza el contador del botón móvil (badge con número de filtros activos)
-function actualizarBadgeFiltros() {
-  const count = state.filtros.familias.size 
-              + state.filtros.marcas.size
-              + (state.filtros.anoDesde ? 1 : 0)
-              + (state.filtros.anoHasta ? 1 : 0);
-  const badge = document.getElementById('badge-filtros');
-  if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count;
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-// Cerrar panel con tecla Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') cerrarFiltrosMobile();
-});

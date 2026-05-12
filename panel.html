@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel del socio · Red Desguace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  /* ===================================================
+     PANEL DEL SOCIO (página demo)
+     =================================================== */
+  .demo-banner {
+    background: #FFF9E6;
+    border-bottom: 1px solid #F5E5A0;
+    padding: 12px 24px;
+    font-size: 13px;
+    color: #7A5C00;
+    text-align: center;
+  }
+  .demo-banner strong { color: #5A4400; }
+
+  .panel-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-header h1 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin: 0 0 4px;
+    letter-spacing: -0.3px;
+  }
+  .panel-header p {
+    font-size: 13px;
+    color: var(--text-mid);
+  }
+  .panel-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel-user .av {
+    width: 38px;
+    height: 38px;
+    background: var(--aad-dark);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .panel-user .info {
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .panel-user .info strong { display: block; color: var(--text); }
+  .panel-user .info span { color: var(--text-mid); font-size: 11px; }
+
+  /* Layout panel */
+  .panel-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+  }
+
+  .panel-menu {
+    background: white;
+    border-radius: var(--radius);
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    height: fit-content;
+    position: sticky;
+    top: 84px;
+  }
+  .panel-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .panel-menu a:hover {
+    background: var(--bg);
+    text-decoration: none;
+  }
+  .panel-menu a.active {
+    border-left-color: var(--aad-mid);
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    font-weight: 600;
+  }
+  .panel-menu a svg {
+    flex-shrink: 0;
+  }
+
+  .panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Métricas */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .metric {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+  }
+  .metric.ok {
+    background: var(--aad-pale);
+    border-color: #9FC58E;
+  }
+  .metric .label {
+    font-size: 11px;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .metric.ok .label { color: var(--aad-dark); }
+  .metric .value {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    letter-spacing: -0.5px;
+  }
+  .metric.ok .value {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0F2920;
+  }
+  .metric .value.small {
+    font-size: 16px;
+  }
+
+  /* Cajas de sección */
+  .box {
+    background: white;
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+  }
+  .box h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .box h3 .pill {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    margin-left: auto;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  .box h3 .pill.warning {
+    background: #FFF1D6;
+    color: #8A5A00;
+  }
+
+  /* Fuente de datos */
+  .src-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .src-opt {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .src-opt:hover { border-color: var(--aad-soft); }
+  .src-opt.selected {
+    border: 2px solid var(--aad-mid);
+    background: var(--aad-pale);
+    padding: 13px 15px;
+  }
+  .src-opt .ttl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--aad-dark);
+    margin-bottom: 6px;
+  }
+  .src-opt .sub {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+  .src-opt .sub strong { color: var(--aad-dark); }
+  .src-opt .check {
+    color: var(--aad-mid);
+  }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    background: var(--bg);
+    transition: all 0.15s;
+  }
+  .drop-zone:hover {
+    border-color: var(--aad-soft);
+    background: var(--bg-soft);
+  }
+  .drop-zone .icon {
+    color: var(--aad-mid);
+    margin-bottom: 8px;
+  }
+  .drop-zone .text {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .drop-zone .text a {
+    color: var(--aad-dark);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .drop-zone .hint {
+    font-size: 11px;
+    color: var(--text-soft);
+  }
+
+  /* Mapeo de columnas */
+  .map-info {
+    font-size: 12px;
+    color: var(--text-mid);
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .map-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .map-row .lbl {
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+  }
+  .map-row .val {
+    padding: 8px 12px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono, monospace);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .map-row .arrow {
+    color: var(--text-soft);
+  }
+  .map-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .map-actions .more {
+    font-size: 12px;
+    color: var(--aad-dark);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .map-actions .edit-btn {
+    padding: 7px 14px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--aad-dark);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .map-actions .edit-btn:hover {
+    background: var(--bg);
+  }
+
+  /* WhatsApp */
+  .wa-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .wa-input input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono, monospace);
+    font-size: 14px;
+  }
+  .wa-input input:focus {
+    outline: none;
+    border-color: var(--aad-mid);
+  }
+  .wa-input button {
+    padding: 10px 18px;
+    background: var(--aad-dark);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .wa-input button:hover { background: #0F2920; }
+  .wa-help {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Responsive panel */
+  @media (max-width: 900px) {
+    .panel-layout {
+      grid-template-columns: 1fr;
+    }
+    .panel-menu {
+      position: static;
+      display: flex;
+      overflow-x: auto;
+      padding: 8px;
+      gap: 4px;
+    }
+    .panel-menu a {
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      padding: 8px 12px;
+      flex-shrink: 0;
+    }
+    .panel-menu a.active {
+      border-left: none;
+      border-bottom-color: var(--aad-mid);
+    }
+    .metrics {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .src-options {
+      grid-template-columns: 1fr;
+    }
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">AAD</div>
+      <div class="brand-text">
+        <strong>Red Desguace</strong>
+        <span>Asociación Andaluza de Desguaces</span>
+      </div>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html">Catálogo</a>
+      <a href="socios.html">Socios</a>
+      <a href="panel.html" class="active">Panel socio</a>
+      <a href="sobre.html">Sobre la AAD</a>
+    </nav>
+  </div>
+</header>
+
+<div class="demo-banner">
+  <strong>Vista demo del panel privado.</strong> Esto es lo que verá cada socio cuando entre con su usuario y contraseña. En la versión final, los datos son reales y editables. Esta demo solo muestra el diseño.
+</div>
+
+<div class="panel-wrap">
+
+  <div class="panel-header">
+    <div>
+      <h1>Buenos días, ReciclaCAT</h1>
+      <p>Aquí tienes el resumen de tu actividad en Red Desguace</p>
+    </div>
+    <div class="panel-user">
+      <div class="info" style="text-align:right;">
+        <strong>ReciclaCAT</strong>
+        <span>Sevilla · CAT</span>
+      </div>
+      <div class="av">RC</div>
+    </div>
+  </div>
+
+  <div class="panel-layout">
+
+    <!-- Menú lateral del panel -->
+    <nav class="panel-menu">
+      <a href="#" class="active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Inicio
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/></svg>
+        Mis piezas
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18"/><path d="M8 21h8"/></svg>
+        Fuente de datos
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+        Mapeo
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+        WhatsApp
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Estadísticas
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Ajustes
+      </a>
+    </nav>
+
+    <!-- Contenido principal del panel -->
+    <main class="panel-content">
+
+      <!-- Métricas -->
+      <div class="metrics">
+        <div class="metric">
+          <div class="label">Piezas activas</div>
+          <div class="value">127.452</div>
+        </div>
+        <div class="metric">
+          <div class="label">Consultas WhatsApp (mes)</div>
+          <div class="value">86</div>
+        </div>
+        <div class="metric">
+          <div class="label">Última sincronización</div>
+          <div class="value small">Hace 4h</div>
+        </div>
+        <div class="metric ok">
+          <div class="label">Estado</div>
+          <div class="value">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Activo
+          </div>
+        </div>
+      </div>
+
+      <!-- Fuente de datos -->
+      <div class="box">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18"/><path d="M8 21h8"/></svg>
+          Fuente de datos
+          <span class="pill">FTP activo</span>
+        </h3>
+
+        <div class="src-options">
+          <div class="src-opt selected">
+            <div class="ttl">
+              <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10" stroke="white" stroke-width="2" fill="none"/></svg>
+              FTP automático
+            </div>
+            <div class="sub"><strong>ftp.reciclacat.com</strong><br>Sincr. cada 6h · formato CRV NET</div>
+          </div>
+          <div class="src-opt">
+            <div class="ttl">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Subida manual
+            </div>
+            <div class="sub">Arrastra un CSV o Excel cuando quieras forzar una actualización fuera del ciclo automático</div>
+          </div>
+        </div>
+
+        <div class="drop-zone">
+          <svg class="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="text">Arrastra aquí tu archivo o <a>selecciónalo desde el ordenador</a></div>
+          <div class="hint">Formatos aceptados: CSV, XLS, XLSX · Tamaño máximo 50 MB</div>
+        </div>
+      </div>
+
+      <!-- Mapeo de columnas -->
+      <div class="box">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+          Mapeo de columnas
+          <span class="pill">8 de 8 configurados</span>
+        </h3>
+        
+        <div class="map-info">
+          Indica qué columna de tu archivo corresponde a cada campo de Red Desguace. Solo lo configuras la primera vez; las siguientes subidas se aplican automáticamente con el mismo mapeo.
+        </div>
+
+        <div class="map-row">
+          <div class="lbl">Referencia interna</div>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="val">refid</div>
+        </div>
+        <div class="map-row">
+          <div class="lbl">Familia</div>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="val">familia</div>
+        </div>
+        <div class="map-row">
+          <div class="lbl">Marca</div>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="val">marca</div>
+        </div>
+        <div class="map-row">
+          <div class="lbl">Modelo</div>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="val">modelo</div>
+        </div>
+        <div class="map-row">
+          <div class="lbl">Precio</div>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <div class="val">precio</div>
+        </div>
+
+        <div class="map-actions">
+          <span class="more">+ 3 campos más (Ref. visual, Ref. catálogo, Imágenes)</span>
+          <button class="edit-btn">Editar mapeo</button>
+        </div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="box">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+          WhatsApp de contacto
+        </h3>
+        <div class="wa-input">
+          <input type="tel" value="+34 649 903 695" placeholder="+34 6XX XXX XXX">
+          <button>Guardar</button>
+        </div>
+        <div class="wa-help">Los compradores verán este número cuando pulsen "Pedir por WhatsApp" en cualquier pieza tuya. Asegúrate de tener WhatsApp Business activo y responder en horario laboral para no perder ventas.</div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>Red Desguace</strong>
+      <p>Plataforma común de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces (AAD).</p>
+    </div>
+    <div class="footer-col">
+      <strong>Demo en construcción</strong>
+      <p>Esta es una versión de muestra con datos reales de un socio (ReciclaCAT, Sevilla). En la versión definitiva estarán los 142 socios.</p>
+    </div>
+    <div class="footer-col">
+      <strong>Contacto</strong>
+      <p><a href="mailto:info@reddesguace.com">info@reddesguace.com</a></p>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Asociación Andaluza de Desguaces</span>
+    <span>Todos los socios son Centros Autorizados de Tratamiento (CAT)</span>
+  </div>
+</footer>
+
+</body>
+</html>

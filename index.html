@@ -26,6 +26,7 @@
     <nav class="topbar-nav">
       <a href="index.html" class="active">Catálogo</a>
       <a href="socios.html">Socios</a>
+      <a href="panel.html">Panel socio</a>
       <a href="sobre.html">Sobre la AAD</a>
     </nav>
   </div>
@@ -39,7 +40,7 @@
     <p class="hero-sub">Stock real, actualizado al día. Contacta directamente con el desguace por WhatsApp.</p>
     <form class="hero-search" role="search" onsubmit="event.preventDefault(); aplicarBusqueda();">
       <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="search" id="busqueda" placeholder="Marca, modelo, referencia o código..." autocomplete="off">
+      <input type="search" id="busqueda" placeholder="Marca, modelo, motor, referencia interna, visual o catálogo..." autocomplete="off">
       <button type="submit">Buscar</button>
     </form>
     <div class="hero-stats">
@@ -51,63 +52,117 @@
   </div>
 </section>
 
-<!-- Cuerpo principal: filtros + rejilla -->
-<main class="layout">
+<!-- Cuerpo principal: filtros horizontales + rejilla -->
+<main class="layout-new">
 
-  <!-- Overlay oscuro para cerrar panel en móvil -->
-  <div class="filters-overlay" id="filters-overlay" onclick="cerrarFiltrosMobile()"></div>
-
-  <!-- Sidebar de filtros (panel lateral en móvil) -->
-  <aside class="filters" id="filters">
-    <div class="filters-header-mobile">
-      <strong>Filtros</strong>
-      <button class="filters-close" onclick="cerrarFiltrosMobile()" aria-label="Cerrar filtros">×</button>
-    </div>
-    <div class="filter-group">
-      <h4>Familia</h4>
-      <div id="filtros-familia" class="filter-list"></div>
-    </div>
-    <div class="filter-group">
-      <h4>Marca</h4>
-      <div id="filtros-marca" class="filter-list"></div>
-    </div>
-    <div class="filter-group">
-      <h4>Año del vehículo</h4>
-      <div class="year-range">
-        <input type="number" id="ano-desde" placeholder="Desde" min="1980" max="2026">
-        <input type="number" id="ano-hasta" placeholder="Hasta" min="1980" max="2026">
-      </div>
-    </div>
-    <div class="filter-group">
-      <h4>Desguace</h4>
-      <div class="filter-list">
-        <label><input type="checkbox" checked disabled> ReciclaCAT (Sevilla)</label>
-      </div>
-      <p class="filter-note">En esta demo solo se muestran piezas de ReciclaCAT. En la versión final estarán los 142 socios.</p>
-    </div>
-    <button class="btn-clear" onclick="limpiarFiltros()">Limpiar filtros</button>
-    <button class="btn-aplicar-mobile" onclick="cerrarFiltrosMobile()">Ver resultados</button>
-  </aside>
-
-  <!-- Contenido principal -->
-  <section class="results">
-    <div class="toolbar">
-      <button class="btn-filtros-mobile" onclick="abrirFiltrosMobile()" aria-label="Abrir filtros">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
-        Filtros
-        <span class="badge-filtros" id="badge-filtros" style="display:none;">0</span>
+  <!-- BARRA DE FILTROS HORIZONTAL -->
+  <div class="filter-bar">
+    
+    <!-- Familia -->
+    <div class="filter-dropdown" data-filter="familia">
+      <button class="filter-btn" onclick="toggleDropdown('familia')" aria-haspopup="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Familia</span>
+        <span class="filter-badge" id="badge-familia" style="display:none;">0</span>
+        <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <div class="count">
-        <strong id="count-resultados">—</strong> piezas encontradas
-        <span id="filtros-activos" class="filters-active"></span>
+      <div class="filter-panel" id="panel-familia">
+        <input type="text" class="filter-search" placeholder="Buscar familia..." oninput="filtrarOpciones('familia', this.value)">
+        <div class="filter-options" id="opciones-familia"></div>
       </div>
-      <select id="orden" onchange="reordenar()">
-        <option value="relevancia">Relevancia</option>
-        <option value="precio-asc">Precio: menor a mayor</option>
-        <option value="precio-desc">Precio: mayor a menor</option>
-      </select>
     </div>
 
+    <!-- Marca -->
+    <div class="filter-dropdown" data-filter="marca">
+      <button class="filter-btn" onclick="toggleDropdown('marca')" aria-haspopup="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14v-3l-2-7H7l-2 7v3z"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg>
+        <span>Marca</span>
+        <span class="filter-badge" id="badge-marca" style="display:none;">0</span>
+        <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="filter-panel" id="panel-marca">
+        <input type="text" class="filter-search" placeholder="Buscar marca..." oninput="filtrarOpciones('marca', this.value)">
+        <div class="filter-options" id="opciones-marca"></div>
+      </div>
+    </div>
+
+    <!-- Modelo (dinámico, solo activo si hay marca seleccionada) -->
+    <div class="filter-dropdown disabled" data-filter="modelo" id="filter-modelo">
+      <button class="filter-btn" onclick="toggleDropdown('modelo')" aria-haspopup="true" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Modelo</span>
+        <span class="filter-badge" id="badge-modelo" style="display:none;">0</span>
+        <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="filter-panel" id="panel-modelo">
+        <input type="text" class="filter-search" placeholder="Buscar modelo..." oninput="filtrarOpciones('modelo', this.value)">
+        <div class="filter-options" id="opciones-modelo"></div>
+      </div>
+    </div>
+
+    <!-- Año -->
+    <div class="filter-dropdown" data-filter="ano">
+      <button class="filter-btn" onclick="toggleDropdown('ano')" aria-haspopup="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Año</span>
+        <span class="filter-badge" id="badge-ano" style="display:none;">0</span>
+        <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="filter-panel" id="panel-ano">
+        <div class="year-range-panel">
+          <div class="year-input">
+            <label>Desde</label>
+            <input type="number" id="ano-desde" placeholder="1980" min="1980" max="2026" onchange="onCambioAno()">
+          </div>
+          <div class="year-input">
+            <label>Hasta</label>
+            <input type="number" id="ano-hasta" placeholder="2026" min="1980" max="2026" onchange="onCambioAno()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desguace -->
+    <div class="filter-dropdown" data-filter="desguace">
+      <button class="filter-btn" onclick="toggleDropdown('desguace')" aria-haspopup="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Desguace</span>
+        <svg class="chev" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="filter-panel" id="panel-desguace">
+        <div class="filter-options">
+          <label><input type="checkbox" checked disabled> ReciclaCAT (Sevilla)</label>
+        </div>
+        <p class="filter-note">En esta demo solo se muestran piezas de ReciclaCAT. En la versión final estarán los 142 socios.</p>
+      </div>
+    </div>
+
+    <div class="filter-sep"></div>
+
+    <!-- Limpiar filtros -->
+    <button class="btn-limpiar" onclick="limpiarFiltros()" id="btn-limpiar" style="display:none;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Limpiar
+    </button>
+
+    <!-- Selector de orden -->
+    <select id="orden" onchange="reordenar()" class="order-select">
+      <option value="relevancia">Relevancia</option>
+      <option value="precio-asc">Precio: menor a mayor</option>
+      <option value="precio-desc">Precio: mayor a menor</option>
+    </select>
+  </div>
+
+  <!-- Contador con chips de filtros activos -->
+  <div class="results-header">
+    <div class="count-label">
+      <strong id="count-resultados">—</strong> piezas encontradas
+    </div>
+    <div id="chips-activos" class="chips-activos"></div>
+  </div>
+
+  <!-- Resultados -->
+  <section class="results">
     <div id="loading" class="loading">
       <div class="spinner"></div>
       <p>Cargando catálogo de piezas...</p>
@@ -126,6 +181,10 @@
       <button id="btn-next" onclick="paginaSiguiente()">Siguiente →</button>
     </div>
   </section>
+
+  <!-- Overlay para cerrar dropdowns al pulsar fuera -->
+  <div class="dropdowns-overlay" id="dropdowns-overlay" onclick="cerrarTodosDropdowns()"></div>
+
 </main>
 
 <!-- Pie -->

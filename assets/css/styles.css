@@ -262,89 +262,202 @@ img { max-width: 100%; height: auto; display: block; }
   letter-spacing: 0.8px;
 }
 
+
 /* =====================================================
-   LAYOUT FILTROS + RESULTADOS
+   LAYOUT NUEVO: SIN SIDEBAR
+   Los filtros ahora son una barra horizontal arriba.
    ===================================================== */
-.layout {
+.layout-new {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 32px 24px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
+  padding: 24px;
 }
 
-.filters {
+/* =====================================================
+   BARRA DE FILTROS HORIZONTAL
+   ===================================================== */
+.filter-bar {
   background: var(--white);
   border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-  height: fit-content;
-  position: sticky;
-  top: 84px;
-}
-.filter-group {
-  padding-bottom: 16px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--border-soft);
-}
-.filter-group:last-of-type {
-  border-bottom: none;
-  margin-bottom: 0;
-}
-.filter-group h4 {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--aad-dark);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 10px 14px;
   margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  z-index: 30;
 }
-.filter-list {
-  max-height: 240px;
+
+.filter-dropdown {
+  position: relative;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 500;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.filter-btn:hover {
+  border-color: var(--aad-mid);
+  background: var(--white);
+}
+.filter-btn .chev {
+  color: var(--text-soft);
+  transition: transform 0.2s;
+  margin-left: 2px;
+}
+.filter-dropdown.open .filter-btn {
+  background: var(--aad-pale);
+  border-color: var(--aad-mid);
+  color: var(--aad-dark);
+}
+.filter-dropdown.open .filter-btn .chev {
+  transform: rotate(180deg);
+}
+.filter-dropdown.has-selection .filter-btn {
+  background: var(--aad-pale);
+  border-color: var(--aad-mid);
+  color: var(--aad-dark);
+}
+.filter-dropdown.disabled .filter-btn {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.filter-dropdown.disabled .filter-btn:hover {
+  border-color: var(--border);
+  background: var(--bg);
+}
+
+.filter-badge {
+  background: var(--aad-dark);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 100px;
+  letter-spacing: 0.3px;
+}
+
+/* Panel del dropdown */
+.filter-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 260px;
+  max-width: 320px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 100;
+}
+.filter-dropdown.open .filter-panel {
+  display: block;
+}
+
+.filter-search {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: var(--font-body);
+  margin-bottom: 10px;
+  background: var(--bg-soft);
+}
+.filter-search:focus {
+  outline: none;
+  border-color: var(--aad-mid);
+  background: var(--white);
+}
+
+.filter-options {
+  max-height: 280px;
   overflow-y: auto;
   margin-right: -4px;
   padding-right: 4px;
 }
-.filter-list::-webkit-scrollbar { width: 4px; }
-.filter-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-.filter-list label {
+.filter-options::-webkit-scrollbar { width: 5px; }
+.filter-options::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.filter-options label {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 0;
+  padding: 6px 6px;
   font-size: 13px;
   cursor: pointer;
   color: var(--text);
+  border-radius: var(--radius-sm);
 }
-.filter-list label:hover { color: var(--aad-dark); }
-.filter-list input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
+.filter-options label:hover {
+  background: var(--bg);
+}
+.filter-options input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
   accent-color: var(--aad-mid);
   cursor: pointer;
+  flex-shrink: 0;
 }
-.filter-list .cnt {
+.filter-options .cnt {
   margin-left: auto;
   font-size: 11px;
   color: var(--text-soft);
 }
-.year-range {
-  display: flex;
-  gap: 8px;
+.filter-options .empty-state {
+  text-align: center;
+  padding: 14px 0;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-style: italic;
 }
-.year-range input {
+
+/* Panel especial para rango de años */
+.year-range-panel {
+  display: flex;
+  gap: 10px;
+  min-width: 240px;
+}
+.year-input {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.year-input label {
+  font-size: 11px;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+.year-input input {
   padding: 8px 10px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 13px;
+  font-family: var(--font-body);
 }
-.year-range input:focus {
+.year-input input:focus {
   outline: none;
   border-color: var(--aad-mid);
 }
+
 .filter-note {
   font-size: 11px;
   color: var(--text-soft);
@@ -352,50 +465,36 @@ img { max-width: 100%; height: auto; display: block; }
   line-height: 1.4;
   font-style: italic;
 }
-.btn-clear {
-  width: 100%;
-  padding: 10px;
-  background: var(--bg);
+
+/* Separador flexible y elementos a la derecha */
+.filter-sep {
+  flex: 1;
+  min-width: 8px;
+}
+
+.btn-limpiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: var(--white);
   color: var(--aad-dark);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-body);
   transition: all 0.15s;
-  margin-top: 16px;
+  white-space: nowrap;
 }
-.btn-clear:hover {
+.btn-limpiar:hover {
   background: var(--aad-pale);
+  border-color: var(--aad-mid);
+  color: var(--aad-dark);
 }
 
-/* =====================================================
-   TOOLBAR Y RESULTADOS
-   ===================================================== */
-.toolbar {
-  background: var(--white);
-  padding: 12px 18px;
-  border-radius: var(--radius);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 16px;
-}
-.toolbar .count {
-  font-size: 14px;
-  color: var(--text-mid);
-}
-.toolbar .count strong {
-  color: var(--aad-dark);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-}
-.filters-active {
-  margin-left: 12px;
-  font-size: 12px;
-  color: var(--text-soft);
-}
-.toolbar select {
+.order-select {
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -403,11 +502,80 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--text);
   background: var(--white);
   cursor: pointer;
+  font-family: var(--font-body);
 }
-.toolbar select:focus {
+.order-select:focus {
   outline: none;
   border-color: var(--aad-mid);
 }
+
+/* Overlay invisible para cerrar dropdowns al pulsar fuera */
+.dropdowns-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+}
+.dropdowns-overlay.active {
+  display: block;
+}
+
+/* =====================================================
+   CONTADOR Y CHIPS DE FILTROS ACTIVOS
+   ===================================================== */
+.results-header {
+  background: var(--white);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.count-label {
+  font-size: 14px;
+  color: var(--text-mid);
+}
+.count-label strong {
+  color: var(--aad-dark);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+.chips-activos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 12px;
+  background: var(--aad-pale);
+  color: var(--aad-dark);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.chip .chip-x {
+  cursor: pointer;
+  color: var(--aad-mid);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+.chip .chip-x:hover {
+  background: var(--aad-mid);
+  color: var(--white);
+}
+
 
 /* Rejilla de tarjetas */
 .grid {
@@ -871,149 +1039,66 @@ img { max-width: 100%; height: auto; display: block; }
   color: rgba(255,255,255,0.5);
 }
 
-/* =====================================================
-   ELEMENTOS DE FILTROS MÓVIL (ocultos en escritorio)
-   ===================================================== */
-.btn-filtros-mobile {
-  display: none;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--aad-dark);
-  color: var(--white);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-  position: relative;
-}
-.btn-filtros-mobile:hover { background: #0F2920; }
-.btn-filtros-mobile .badge-filtros {
-  background: var(--aad-accent);
-  color: var(--aad-dark);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 100px;
-  margin-left: 2px;
-}
-
-.filters-header-mobile { display: none; }
-.filters-overlay { display: none; }
-.btn-aplicar-mobile { display: none; }
 
 /* =====================================================
-   RESPONSIVE — TABLET (901–600px)
+   RESPONSIVE
    ===================================================== */
 @media (max-width: 900px) {
   .hero h1 { font-size: 32px; }
   .hero-stats { gap: 24px; }
   .hero-stats strong { font-size: 20px; }
   
-  /* Layout: una columna, filtros pasan a ser panel modal */
-  .layout {
-    grid-template-columns: 1fr;
-    padding: 16px;
-    gap: 0;
-  }
-
-  /* Cabecera del panel móvil */
-  .filters-header-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .filters-header-mobile strong {
-    font-family: var(--font-display);
-    font-size: 18px;
-    color: var(--aad-dark);
-  }
-  .filters-close {
-    width: 32px;
-    height: 32px;
-    background: var(--bg);
-    color: var(--text);
-    border-radius: 50%;
-    font-size: 22px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  /* Panel deslizable: oculto por defecto */
-  .filters {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: min(86%, 360px);
-    max-width: 360px;
-    z-index: 200;
-    border-radius: 0;
-    padding: 16px;
-    overflow-y: auto;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
-    transform: translateX(-100%);
-    transition: transform 0.25s ease-out;
-  }
-  .filters.open {
-    transform: translateX(0);
-  }
-  .filter-list { max-height: none; }
-
-  /* Overlay oscuro detrás del panel */
-  .filters-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 150;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s;
-  }
-  .filters-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Botón "Filtros" visible en móvil */
-  .btn-filtros-mobile { display: inline-flex; }
-
-  /* Botón "Ver resultados" abajo del panel */
-  .btn-aplicar-mobile {
-    display: block;
-    width: 100%;
+  .layout-new {
     padding: 14px;
-    background: var(--aad-mid);
-    color: var(--white);
-    border-radius: var(--radius-sm);
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 16px;
-    cursor: pointer;
   }
-  .btn-aplicar-mobile:hover { background: var(--aad-dark); }
-
-  /* Toolbar reorganizada en móvil: filtros izquierda, orden derecha */
-  .toolbar {
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px 12px;
+  
+  .filter-bar {
+    padding: 8px 10px;
+    gap: 6px;
   }
-  .toolbar .count {
+  .filter-btn {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .filter-btn span {
+    /* En móvil podemos ocultar el texto del botón y mostrar solo el icono */
+    /* pero conservamos el texto para que se entienda. Sólo reducimos. */
+  }
+  /* En móvil el panel se ancla a la barra de filtros completa, no al botón.
+     De esta forma siempre se ve completo, no se sale del viewport. */
+  .filter-dropdown {
+    position: static;
+  }
+  .filter-bar {
+    position: relative;
+  }
+  .filter-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    min-width: 0;
+    max-width: none;
+    margin-top: 4px;
+    border-radius: var(--radius);
+  }
+  .filter-options {
+    max-height: 320px;
+  }
+  .filter-sep {
     width: 100%;
-    order: 3;
-    font-size: 13px;
+    flex-basis: 100%;
+    min-width: 0;
   }
-
-  /* Otros ajustes */
+  .btn-limpiar {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .order-select {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  
   .ficha { grid-template-columns: 1fr; gap: 24px; padding: 16px; }
   .ficha-details h1 { font-size: 24px; }
   .ficha-price .precio { font-size: 32px; }
@@ -1022,28 +1107,50 @@ img { max-width: 100%; height: auto; display: block; }
   .topbar-nav { gap: 4px; }
   .topbar-nav a { padding: 6px 10px; font-size: 12px; }
   .brand-text span { display: none; }
-
-  /* Bloquear scroll del body cuando panel abierto */
-  body.filters-open {
-    overflow: hidden;
-  }
 }
 
-/* =====================================================
-   RESPONSIVE — MÓVIL (≤600px)
-   ===================================================== */
 @media (max-width: 600px) {
   .hero { padding: 40px 16px; }
   .hero h1 { font-size: 26px; }
   .hero-search { padding: 4px; }
   .hero-search input { font-size: 14px; padding: 10px; }
   .hero-search button { padding: 10px 16px; }
-  .layout { padding: 12px; }
+  .layout-new { padding: 10px; }
   .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .card-title { font-size: 12px; }
   .card-price { font-size: 16px; }
   
-  /* Toolbar más compacta */
-  .toolbar select { font-size: 12px; padding: 6px 8px; }
-  .btn-filtros-mobile { padding: 8px 12px; font-size: 12px; }
+  /* En móviles pequeños permitimos que la barra de filtros se envuelva
+     en varias líneas en lugar de scroll horizontal. El scroll horizontal
+     crea un nuevo contexto que rompe el position:absolute de los paneles. */
+  .filter-bar {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  .filter-bar > .filter-dropdown {
+    flex-shrink: 0;
+  }
+  .filter-sep {
+    display: none;
+  }
+  .btn-limpiar, .order-select {
+    flex-shrink: 0;
+  }
+  
+  /* Los chips también con scroll */
+  .results-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .chips-activos {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .chips-activos::-webkit-scrollbar { display: none; }
+  .chip {
+    flex-shrink: 0;
+  }
 }
