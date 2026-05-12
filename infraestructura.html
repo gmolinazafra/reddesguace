@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infraestructura · Red Desguace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, var(--aad-mid) 0%, var(--aad-dark) 100%);
+    color: white;
+    padding: 56px 24px;
+    text-align: center;
+  }
+  .page-hero .kicker {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--aad-accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 14px;
+    border: 1px solid rgba(192,221,151,0.3);
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+  }
+  .page-hero p {
+    max-width: 680px;
+    margin: 0 auto;
+    color: rgba(255,255,255,0.85);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
+  }
+  .section-sub {
+    color: var(--text-mid);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+  .section {
+    margin-bottom: 56px;
+  }
+
+  /* ===========================================
+     COSTES: Tabla profesional con desglose
+     =========================================== */
+  .costes-grid {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .costes-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2.5fr 1fr;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    align-items: center;
+    font-size: 14px;
+  }
+  .costes-row:last-of-type { border-bottom: none; }
+  .costes-row.header {
+    background: var(--aad-dark);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 12px 20px;
+  }
+  .costes-row .servicio {
+    font-weight: 600;
+    color: var(--aad-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .costes-row .servicio .ico {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .costes-row .descripcion {
+    color: var(--text-mid);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .costes-row .precio {
+    text-align: right;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--aad-dark);
+    font-size: 16px;
+  }
+  .costes-row.total {
+    background: var(--aad-pale);
+    padding: 18px 20px;
+  }
+  .costes-row.total .servicio { font-size: 16px; }
+  .costes-row.total .precio { font-size: 22px; }
+  .costes-row.opcional .precio { color: var(--text-mid); font-style: italic; font-weight: 500; }
+
+  .resumen-cuota {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .resumen-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+  .resumen-card.principal {
+    background: linear-gradient(135deg, var(--aad-dark) 0%, var(--aad-mid) 100%);
+    color: white;
+  }
+  .resumen-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-mid);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .resumen-card.principal .label { color: rgba(255,255,255,0.85); }
+  .resumen-card .valor {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--aad-dark);
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .resumen-card.principal .valor { color: white; }
+  .resumen-card .nota {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-top: 4px;
+  }
+  .resumen-card.principal .nota { color: rgba(255,255,255,0.7); }
+
+  /* ===========================================
+     STACK: cards con logo y descripción
+     =========================================== */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .stack-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-soft);
+    transition: all 0.15s;
+  }
+  .stack-card:hover {
+    border-color: var(--aad-soft);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .stack-card .stack-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    color: white;
+  }
+  .stack-card .stack-icon.vercel { background: #000; }
+  .stack-card .stack-icon.supabase { background: #3ECF8E; }
+  .stack-card .stack-icon.r2 { background: #F38020; }
+  .stack-card .stack-icon.next { background: #000; }
+  .stack-card .stack-icon.github { background: #24292E; }
+  .stack-card .stack-icon.cloudflare { background: #F48120; }
+  .stack-card .stack-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+  }
+  .stack-card .stack-role {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--aad-mid);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .stack-card .stack-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+  .stack-card .stack-desc strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ===========================================
+     RENDIMIENTO: pestañas con datos
+     =========================================== */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .perf-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+    border-top: 4px solid var(--aad-mid);
+  }
+  .perf-card .perf-num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--aad-dark);
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .perf-card .perf-unit {
+    font-size: 13px;
+    color: var(--aad-mid);
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .perf-card .perf-label {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 600;
+    margin: 8px 0 4px;
+  }
+  .perf-card .perf-desc {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ===========================================
+     ESCALABILIDAD: tabla escalado
+     =========================================== */
+  .escala-table {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .escala-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-soft);
+    align-items: center;
+    font-size: 14px;
+  }
+  .escala-row:last-child { border-bottom: none; }
+  .escala-row.header {
+    background: var(--aad-dark);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 12px 20px;
+  }
+  .escala-row .escenario {
+    font-weight: 600;
+    color: var(--aad-dark);
+  }
+  .escala-row .precio-cell {
+    color: var(--aad-dark);
+    font-weight: 600;
+  }
+  .escala-row .precio-cell.actual {
+    color: var(--aad-mid);
+  }
+  .escala-row .nota-cell {
+    color: var(--text-mid);
+    font-size: 12px;
+  }
+  .escala-row.actual {
+    background: var(--aad-pale);
+  }
+  .escala-row.actual .escenario::after {
+    content: " · actual";
+    font-size: 10px;
+    color: var(--aad-mid);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin-left: 4px;
+  }
+
+  /* ===========================================
+     SEGURIDAD: lista con check
+     =========================================== */
+  .seguridad-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .seguridad-item {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .seguridad-item .check {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--aad-pale);
+    color: var(--aad-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .seguridad-item .seg-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .seguridad-item .seg-text strong {
+    color: var(--aad-dark);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* ===========================================
+     RESPONSIVE
+     =========================================== */
+  @media (max-width: 900px) {
+    .page-hero h1 { font-size: 30px; }
+    .page-hero p { font-size: 14px; }
+    .container { padding: 32px 16px; }
+    .section-title { font-size: 20px; }
+    .costes-row {
+      grid-template-columns: 1fr auto;
+      gap: 4px 12px;
+    }
+    .costes-row .descripcion {
+      grid-column: 1 / 3;
+      font-size: 12px;
+      padding-top: 4px;
+    }
+    .costes-row.header {
+      display: none;
+    }
+    .resumen-cuota {
+      grid-template-columns: 1fr;
+    }
+    .escala-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+    .escala-row.header { display: none; }
+    .escala-row .escenario { grid-column: 1 / 3; font-size: 14px; }
+    .escala-row .nota-cell { grid-column: 1 / 3; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">AAD</div>
+      <div class="brand-text">
+        <strong>Red Desguace</strong>
+        <span>Asociación Andaluza de Desguaces</span>
+      </div>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html">Catálogo</a>
+      <a href="socios.html">Socios</a>
+      <a href="panel.html">Panel socio</a>
+      <a href="sobre.html">Sobre la AAD</a>
+      <a href="infraestructura.html" class="active">Infraestructura</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="page-hero">
+  <div class="kicker">Infraestructura del proyecto</div>
+  <h1>Cómo está construida Red Desguace</h1>
+  <p>Plataforma profesional, rápida, segura y escalable. Aquí explicamos qué herramientas usamos, cuánto cuesta mantenerla cada mes, y cómo garantizamos que la búsqueda de cualquiera de los 177.720 recambios sea instantánea.</p>
+</section>
+
+<div class="container">
+
+  <!-- ===== COSTES MENSUALES ===== -->
+  <div class="section">
+    <h2 class="section-title">1. Coste mensual desglosado</h2>
+    <p class="section-sub">
+      Estos son los servicios que Red Desguace usa cada mes, con su precio real. Todo se paga con la cuota común de la AAD; los socios no tienen que contratar nada por su cuenta.
+    </p>
+
+    <div class="costes-grid">
+      <div class="costes-row header">
+        <div>Servicio</div>
+        <div>Qué cubre</div>
+        <div style="text-align:right;">Precio/mes</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          Vercel Pro
+        </div>
+        <div class="descripcion">Alojamiento de la web, CDN global con caché en 300+ ciudades, despliegue automático y certificado SSL.</div>
+        <div class="precio">20 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+          </div>
+          Supabase Pro
+        </div>
+        <div class="descripcion">Base de datos PostgreSQL para las 177.720 piezas, panel de socios y autenticación. Búsqueda indexada.</div>
+        <div class="precio">25 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          Cloudflare R2
+        </div>
+        <div class="descripcion">Almacén de las fotos de las piezas (hasta 200 GB). Sin coste por descarga, a diferencia de Amazon S3.</div>
+        <div class="precio">10 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          Dominio
+        </div>
+        <div class="descripcion">reddesguace.com renovación anual prorrateada por mes.</div>
+        <div class="precio">1 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+          </div>
+          Google Workspace
+        </div>
+        <div class="descripcion">info@reddesguace.com y otras direcciones institucionales del proyecto.</div>
+        <div class="precio">6 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          Google Ads
+        </div>
+        <div class="descripcion">Inversión en publicidad para atraer compradores al catálogo. Es lo que pone el catálogo en el mapa.</div>
+        <div class="precio">2.000 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          SEO técnico
+        </div>
+        <div class="descripcion">Trabajo de posicionamiento orgánico para aparecer en Google sin pagar por cada clic. Largo plazo.</div>
+        <div class="precio">200 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          Mantenimiento
+        </div>
+        <div class="descripcion">Mejoras evolutivas, atención de incidencias, copias de seguridad supervisadas y soporte a socios.</div>
+        <div class="precio">400 €</div>
+      </div>
+
+      <div class="costes-row">
+        <div class="servicio">
+          <div class="ico" style="background:#FFF1D6; color:#8A5A00;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          Reserva técnica
+        </div>
+        <div class="descripcion">Margen para imprevistos, picos de tráfico, ampliaciones de almacenamiento, asesoría legal puntual.</div>
+        <div class="precio">178 €</div>
+      </div>
+
+      <div class="costes-row total">
+        <div class="servicio">
+          <div class="ico" style="background:var(--aad-mid); color:white;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          Total mensual
+        </div>
+        <div class="descripcion">Suma de todos los servicios anteriores.</div>
+        <div class="precio">2.840 €</div>
+      </div>
+    </div>
+
+    <div class="resumen-cuota">
+      <div class="resumen-card">
+        <div class="label">142 socios</div>
+        <div class="valor">20 €</div>
+        <div class="nota">cuota mensual por socio</div>
+      </div>
+      <div class="resumen-card principal">
+        <div class="label">Coste total anual</div>
+        <div class="valor">34.080 €</div>
+        <div class="nota">2.840 € × 12 meses</div>
+      </div>
+      <div class="resumen-card">
+        <div class="label">Inversión publicitaria/año</div>
+        <div class="valor">24.000 €</div>
+        <div class="nota">para atraer compradores al catálogo</div>
+      </div>
+    </div>
+
+    <div style="background:var(--aad-pale); border-left:3px solid var(--aad-mid); border-radius:0 8px 8px 0; padding:14px 18px; margin-top:24px; font-size:13px; color:var(--aad-dark); line-height:1.6;">
+      <strong>Sin coste por venta.</strong> A diferencia de los marketplaces (Wallapop Motor, eBay, Mil Anuncios Pro), Red Desguace <strong>no cobra comisión por las ventas</strong>. El comprador habla directamente por WhatsApp con el socio y la venta es 100% suya. Solo se cubren los costes de la infraestructura común.
+    </div>
+  </div>
+
+  <!-- ===== STACK TECNOLÓGICO ===== -->
+  <div class="section">
+    <h2 class="section-title">2. Stack tecnológico</h2>
+    <p class="section-sub">
+      Las herramientas que usamos son las mismas que utilizan empresas como Stripe, Notion, Linear o McDonald's en sus aplicaciones digitales. Estándar profesional, no soluciones caseras.
+    </p>
+
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-icon next">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 0 1-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.875 11.875 0 0 0-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 0 0-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 0 1-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 0 1-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 0 1 .174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 0 0 4.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 0 0 2.466-2.163 11.944 11.944 0 0 0 2.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.859-8.292-8.208-9.695a12.597 12.597 0 0 0-2.499-.523A33.119 33.119 0 0 0 11.573 0zm4.069 7.217c.347 0 .408.005.486.047a.473.473 0 0 1 .237.277c.018.06.023 1.365.018 4.304l-.006 4.218-.744-1.14-.746-1.14v-3.066c0-1.982.01-3.097.023-3.15a.478.478 0 0 1 .233-.296c.096-.05.13-.054.5-.054z"/></svg>
+        </div>
+        <div class="stack-role">FRAMEWORK</div>
+        <div class="stack-name">Next.js</div>
+        <div class="stack-desc"><strong>El framework web más usado del mundo.</strong> Genera páginas pre-renderizadas que cargan en menos de un segundo. Lo usan Notion, Hulu, Twitch, TikTok.</div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon vercel">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg>
+        </div>
+        <div class="stack-role">ALOJAMIENTO</div>
+        <div class="stack-name">Vercel</div>
+        <div class="stack-desc"><strong>CDN global automático.</strong> Sirve la web desde el servidor más cercano al usuario. Servidores en Madrid, Londres, París... Tiempo de respuesta inferior a 50 ms en Europa.</div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon supabase">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21.362 9.354H12V.396a.396.396 0 00-.716-.233L2.203 12.424l-.401.562a1.04 1.04 0 00.836 1.66H12v8.959a.396.396 0 00.716.233l9.081-12.261.401-.562a1.04 1.04 0 00-.836-1.66z"/></svg>
+        </div>
+        <div class="stack-role">BASE DE DATOS</div>
+        <div class="stack-name">Supabase</div>
+        <div class="stack-desc"><strong>PostgreSQL en la nube.</strong> Base de datos profesional con búsqueda indexada. Cada consulta del catálogo se resuelve en milisegundos sobre las 177.720 piezas.</div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon r2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 16.25a1.59 1.59 0 0 1 1.5 1.59A1.59 1.59 0 0 1 16.5 19.4a1.59 1.59 0 0 1-1.6-1.56 1.59 1.59 0 0 1 1.6-1.59zm-8.99 0a1.59 1.59 0 0 1 1.59 1.59A1.59 1.59 0 0 1 7.51 19.4a1.59 1.59 0 0 1-1.6-1.56 1.59 1.59 0 0 1 1.6-1.59zM12 16.25a1.59 1.59 0 0 1 1.6 1.59A1.59 1.59 0 0 1 12 19.4a1.59 1.59 0 0 1-1.59-1.56A1.59 1.59 0 0 1 12 16.25zM5.5 4.55h13a3 3 0 0 1 3 3v3.5a3 3 0 0 1-3 3h-13a3 3 0 0 1-3-3v-3.5a3 3 0 0 1 3-3z"/></svg>
+        </div>
+        <div class="stack-role">ALMACÉN DE FOTOS</div>
+        <div class="stack-name">Cloudflare R2</div>
+        <div class="stack-desc"><strong>Storage barato y rápido.</strong> Las fotos se sirven desde la red global de Cloudflare (300+ ciudades). Sin coste por descarga, a diferencia de Amazon S3.</div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon cloudflare">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.667-.1123a.1559.1559 0 0 1-.1333-.0703.1715.1715 0 0 1-.0215-.1543.2528.2528 0 0 1 .2236-.1689l8.7461-.1123c1.0371-.0479 2.1592-.8867 2.5527-1.9131l.499-1.3017a.305.305 0 0 0 .0205-.1612 5.5903 5.5903 0 0 0-10.7402-.5723 2.5167 2.5167 0 0 0-1.7666-.4892A2.519 2.519 0 0 0 3.8242 12.5a2.473 2.473 0 0 0 .0644.6191A3.5739 3.5739 0 0 0 .4082 16.671a.3387.3387 0 0 0 .0156.1474.3447.3447 0 0 0 .3438.2588h15.0234c.2148 0 .4014-.1308.4707-.3252z"/></svg>
+        </div>
+        <div class="stack-role">PROTECCIÓN Y CDN</div>
+        <div class="stack-name">Cloudflare</div>
+        <div class="stack-desc"><strong>Escudo contra ataques.</strong> Protege la web de bots y ataques DDoS. Acelera la carga reutilizando contenido. Servicio usado por más del 20% de internet.</div>
+      </div>
+
+      <div class="stack-card">
+        <div class="stack-icon github">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </div>
+        <div class="stack-role">CÓDIGO FUENTE</div>
+        <div class="stack-name">GitHub</div>
+        <div class="stack-desc"><strong>Versionado y backup del código.</strong> Todo el código de la web está guardado con historial completo. Si algo falla, podemos volver atrás en segundos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RENDIMIENTO ===== -->
+  <div class="section">
+    <h2 class="section-title">3. Cómo garantizamos la velocidad</h2>
+    <p class="section-sub">
+      Si la web es lenta, los compradores se van. Si no aparecemos en Google, nadie nos encuentra. Estas son nuestras métricas objetivo.
+    </p>
+
+    <div class="perf-grid">
+      <div class="perf-card">
+        <div class="perf-num">&lt; 200<span class="perf-unit">ms</span></div>
+        <div class="perf-label">Tiempo de respuesta</div>
+        <div class="perf-desc">Cualquier búsqueda en el catálogo se resuelve en menos de un parpadeo, sobre las 177.720 piezas.</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-num">99,9<span class="perf-unit">%</span></div>
+        <div class="perf-label">Disponibilidad</div>
+        <div class="perf-desc">La web está accesible 24/7. Los proveedores de infraestructura garantizan menos de 9 horas de caída al año.</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-num">300+</div>
+        <div class="perf-label">Servidores en el mundo</div>
+        <div class="perf-desc">Las fotos y páginas se sirven desde el servidor más cercano al comprador, sea de Andalucía o de fuera de España.</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-num">90+</div>
+        <div class="perf-label">Puntuación Lighthouse</div>
+        <div class="perf-desc">Lighthouse es la herramienta de Google que mide rendimiento. Objetivo: 90/100 o superior en todas las páginas.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--font-display); font-size:17px; margin:32px 0 12px; color:var(--aad-dark);">¿Por qué será rápida con 177.720 piezas?</h3>
+    <div style="background:white; border-radius:var(--radius); padding:22px 24px; box-shadow:var(--shadow-sm); font-size:14px; color:var(--text); line-height:1.7;">
+      <p style="margin:0 0 12px;"><strong style="color:var(--aad-dark);">1. Búsqueda indexada en base de datos.</strong> PostgreSQL crea índices internos sobre los campos clave (marca, modelo, motor, referencias). Cuando alguien busca "motor BKD", la base de datos no recorre las 177.720 filas: salta directamente al índice y encuentra las coincidencias en milisegundos.</p>
+      <p style="margin:0 0 12px;"><strong style="color:var(--aad-dark);">2. Caché en CDN.</strong> Las búsquedas más habituales (faro Renault Megane, capó Ford Focus, etc.) se quedan guardadas en los servidores de Vercel. La segunda persona que busque lo mismo no toca nuestra base de datos, recibe la respuesta directamente del CDN. Esto multiplica la capacidad x 100.</p>
+      <p style="margin:0 0 12px;"><strong style="color:var(--aad-dark);">3. Imágenes optimizadas automáticamente.</strong> Cada foto se sirve en el formato más eficiente para cada dispositivo (WebP en navegadores modernos, JPG en los antiguos). Tamaño adaptado a cada pantalla. Una foto que ocupaba 2 MB pasa a pesar 80 KB sin perder calidad visible.</p>
+      <p style="margin:0;"><strong style="color:var(--aad-dark);">4. SEO técnico.</strong> Cada ficha de pieza tiene su propia URL, su título, su descripción y datos estructurados que Google entiende. Cuando alguien busque en Google "tapa motor SEAT León BKD", podemos aparecer si tenemos esa pieza en stock.</p>
+    </div>
+  </div>
+
+  <!-- ===== ESCALABILIDAD ===== -->
+  <div class="section">
+    <h2 class="section-title">4. Cómo escala el sistema</h2>
+    <p class="section-sub">
+      Cuando lleguemos a más socios o más piezas, la infraestructura se adapta sin cambios bruscos. El crecimiento es predecible y controlado.
+    </p>
+
+    <div class="escala-table">
+      <div class="escala-row header">
+        <div>Escenario</div>
+        <div>Piezas totales</div>
+        <div>Coste/mes</div>
+        <div>Nota técnica</div>
+      </div>
+      <div class="escala-row actual">
+        <div class="escenario">Hoy</div>
+        <div class="precio-cell actual">177.720</div>
+        <div class="precio-cell actual">2.840 €</div>
+        <div class="nota-cell">Solo ReciclaCAT. Resto del coste va a publicidad, no a infraestructura.</div>
+      </div>
+      <div class="escala-row">
+        <div class="escenario">Fase piloto</div>
+        <div class="precio-cell">~300.000</div>
+        <div class="precio-cell">2.840 €</div>
+        <div class="nota-cell">10 socios activos. Misma infraestructura, sin cambios de tarifa.</div>
+      </div>
+      <div class="escala-row">
+        <div class="escenario">Despliegue completo</div>
+        <div class="precio-cell">~1.500.000</div>
+        <div class="precio-cell">~3.200 €</div>
+        <div class="nota-cell">142 socios. Solo aumenta el almacenamiento de fotos (R2) y la BD.</div>
+      </div>
+      <div class="escala-row">
+        <div class="escenario">Crecimiento extra</div>
+        <div class="precio-cell">+3.000.000</div>
+        <div class="precio-cell">~4.000 €</div>
+        <div class="nota-cell">Si la AAD se amplía o llegan más fotos por pieza. Margen disponible en la cuota.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--aad-pale); border-left:3px solid var(--aad-mid); border-radius:0 8px 8px 0; padding:14px 18px; margin-top:18px; font-size:13px; color:var(--aad-dark); line-height:1.6;">
+      <strong>El número de visitantes no aumenta el coste base.</strong> Vercel y Cloudflare están diseñados para servir millones de visitas al día sin cargos adicionales. Lo que crece con el uso es solo el almacenamiento de fotos (R2) y las consultas a la base de datos, ambas partidas muy controladas.
+    </div>
+  </div>
+
+  <!-- ===== SEGURIDAD Y BACKUPS ===== -->
+  <div class="section">
+    <h2 class="section-title">5. Seguridad y copias de seguridad</h2>
+    <p class="section-sub">
+      Los datos de los socios y las imágenes de las piezas son responsabilidad de la AAD. Cumplimos los estándares europeos de seguridad y privacidad.
+    </p>
+
+    <div class="seguridad-grid">
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>Cifrado en tránsito y en reposo</strong>
+          Todas las comunicaciones con la web van por HTTPS (SSL). Los datos en la base están cifrados en disco.
+        </div>
+      </div>
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>Backups diarios automáticos</strong>
+          Supabase guarda copia completa cada 24h, conservada 7 días. Plus snapshots manuales antes de cambios.
+        </div>
+      </div>
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>RGPD y normativa europea</strong>
+          Datos alojados en servidores de la UE. Cumplimos el Reglamento General de Protección de Datos.
+        </div>
+      </div>
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>Aislamiento entre socios</strong>
+          Cada socio solo accede a sus propios datos. Imposible que un socio vea o edite las piezas de otro.
+        </div>
+      </div>
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>Protección contra bots</strong>
+          Cloudflare bloquea automáticamente scrapers que intenten copiar el catálogo masivamente.
+        </div>
+      </div>
+      <div class="seguridad-item">
+        <div class="check">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="seg-text">
+          <strong>Código abierto a auditoría</strong>
+          El código fuente está en GitHub privado de la AAD. Cualquier socio técnico puede revisarlo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CIERRE ===== -->
+  <div style="background:linear-gradient(135deg, var(--aad-dark) 0%, var(--aad-mid) 100%); color:white; padding:36px 32px; border-radius:var(--radius); text-align:center; margin-top:24px;">
+    <h2 style="font-family:var(--font-display); font-size:24px; margin:0 0 12px; letter-spacing:-0.5px;">¿Tienes preguntas técnicas?</h2>
+    <p style="color:rgba(255,255,255,0.85); font-size:15px; line-height:1.6; max-width:620px; margin:0 auto 20px;">
+      Si eres socio técnico o quieres revisar cualquier aspecto de la arquitectura, podemos organizar una reunión con la junta o una demo personalizada. Buscamos transparencia total.
+    </p>
+    <a href="mailto:info@reddesguace.com" style="display:inline-flex; align-items:center; gap:8px; background:white; color:var(--aad-dark); padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:600; font-size:14px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+      info@reddesguace.com
+    </a>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>Red Desguace</strong>
+      <p>Plataforma común de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces (AAD).</p>
+    </div>
+    <div class="footer-col">
+      <strong>Demo en construcción</strong>
+      <p>Esta es una versión de muestra con datos reales de un socio (ReciclaCAT, Sevilla). En la versión definitiva estarán los 142 socios.</p>
+    </div>
+    <div class="footer-col">
+      <strong>Contacto</strong>
+      <p><a href="mailto:info@reddesguace.com">info@reddesguace.com</a></p>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Asociación Andaluza de Desguaces</span>
+    <span>Todos los socios son Centros Autorizados de Tratamiento (CAT)</span>
+  </div>
+</footer>
+
+</body>
+</html>
