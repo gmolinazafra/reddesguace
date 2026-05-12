@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre la AAD · Red Desguace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, var(--aad-mid) 0%, var(--aad-dark) 100%);
+    color: white;
+    padding: 60px 24px;
+    text-align: center;
+  }
+  .page-hero .kicker {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--aad-accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 14px;
+    border: 1px solid rgba(192,221,151,0.3);
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .page-hero p {
+    max-width: 680px;
+    margin: 0 auto;
+    color: rgba(255,255,255,0.85);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+  .section {
+    margin-bottom: 48px;
+  }
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+  }
+  .section p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .pillar {
+    background: var(--white);
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  .pillar .icon {
+    width: 44px;
+    height: 44px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .pillar h3 {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--aad-dark);
+  }
+  .pillar p {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .quote {
+    background: var(--aad-pale);
+    border-left: 4px solid var(--aad-mid);
+    padding: 24px 28px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 32px 0;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--aad-dark);
+    line-height: 1.5;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .stat {
+    padding: 20px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-soft);
+  }
+  .stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--aad-dark);
+    letter-spacing: -0.5px;
+  }
+  .stat span {
+    font-size: 12px;
+    color: var(--text-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 700px) {
+    .pillars, .stats-row { grid-template-columns: 1fr; }
+    .page-hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">AAD</div>
+      <div class="brand-text">
+        <strong>Red Desguace</strong>
+        <span>Asociación Andaluza de Desguaces</span>
+      </div>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html">Catálogo</a>
+      <a href="socios.html">Socios</a>
+      <a href="sobre.html" class="active">Sobre la AAD</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="kicker">Asociación Andaluza de Desguaces</div>
+  <h1>Reciclaje del automóvil con criterio</h1>
+  <p>La AAD agrupa a los 142 Centros Autorizados de Tratamiento de Vehículos de Andalucía. Trabajamos para profesionalizar el sector, cumplir con la normativa medioambiental y dar visibilidad al stock conjunto de nuestros socios.</p>
+</section>
+
+<div class="container">
+
+  <div class="stats-row">
+    <div class="stat"><strong>142</strong><span>Socios CAT</span></div>
+    <div class="stat"><strong>8</strong><span>Provincias</span></div>
+    <div class="stat"><strong>+1.8M</strong><span>Piezas</span></div>
+    <div class="stat"><strong>EGARA</strong><span>Miembros</span></div>
+  </div>
+
+  <div class="section">
+    <h2>Qué es Red Desguace</h2>
+    <p>Red Desguace es la plataforma común de la Asociación Andaluza de Desguaces. Una web donde cualquier comprador, particular o profesional, puede buscar entre el stock de piezas de los 142 socios de la asociación y contactar directamente con el desguace propietario por WhatsApp.</p>
+    <p>No es un marketplace. La asociación no se mete en la venta, no cobra comisiones por pieza, no gestiona logística. Cada socio cierra sus ventas como siempre ha hecho. Lo que hace Red Desguace es lo que un solo desguace no puede permitirse: <strong>una web profesional, posicionada en Google, con campañas de publicidad continuas a nivel autonómico</strong>.</p>
+  </div>
+
+  <div class="quote">
+    "Lo que no puede hacer cada socio por separado, lo conseguimos juntos: visibilidad, profesionalización y aprovechamiento del stock."
+  </div>
+
+  <div class="section">
+    <h2>Cómo funciona</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">🔍</div>
+        <h3>El comprador busca</h3>
+        <p>Entra a la web, busca su pieza por marca, modelo o referencia. Ve fotos, precios y datos técnicos reales.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">💬</div>
+        <h3>Pulsa WhatsApp</h3>
+        <p>Se abre WhatsApp directamente con el desguace dueño de la pieza, con un mensaje pre-rellenado.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">🤝</div>
+        <h3>El socio cierra</h3>
+        <p>El desguace responde por WhatsApp, acuerda precio, envío y cierra la venta. Sin intermediarios.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Cómo se financia</h2>
+    <p>Cada socio paga una cuota mensual a la asociación que cubre el hosting profesional, el mantenimiento técnico y, lo más importante, una inversión continua en campañas de Google Ads a nivel andaluz que traen compradores reales a la plataforma.</p>
+    <p>Sin esa inversión publicitaria, la web no tendría tráfico y no serviría de nada. Con ella, cada socio recibe consultas de WhatsApp tangibles cada mes.</p>
+  </div>
+
+  <div class="section">
+    <h2>Compromiso medioambiental</h2>
+    <p>Todos los socios de la AAD son <strong>Centros Autorizados de Tratamiento de Vehículos (CAT)</strong>. Esto significa que cumplen con el Real Decreto 20/2017 sobre vehículos al final de su vida útil, gestionan correctamente los residuos peligrosos, y emiten certificados oficiales de destrucción.</p>
+    <p>La AAD es miembro de <strong>EGARA</strong> (European Group of Automotive Recycling Associations), la red europea de asociaciones nacionales de reciclaje del automóvil.</p>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>Red Desguace</strong>
+      <p>Plataforma común de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces (AAD).</p>
+    </div>
+    <div class="footer-col">
+      <strong>Demo en construcción</strong>
+      <p>Esta es una versión de muestra con datos reales de un socio (ReciclaCAT, Sevilla). En la versión definitiva estarán los 142 socios.</p>
+    </div>
+    <div class="footer-col">
+      <strong>Contacto</strong>
+      <p><a href="mailto:info@reddesguace.com">info@reddesguace.com</a></p>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Asociación Andaluza de Desguaces</span>
+    <span>Todos los socios son Centros Autorizados de Tratamiento (CAT)</span>
+  </div>
+</footer>
+
+</body>
+</html>

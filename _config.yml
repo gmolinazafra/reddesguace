@@ -1,0 +1,11 @@
+# Configuración Jekyll (la usa GitHub Pages internamente)
+# Esto evita procesamiento Jekyll para mejorar velocidad de servir archivos.
+
+title: Red Desguace
+description: Plataforma común de los 142 desguaces autorizados de la AAD
+
+# No procesar Jekyll en estos archivos (sólo servirlos tal cual)
+exclude:
+  - scripts/
+  - README.md
+  - .gitignore

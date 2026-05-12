@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Red Desguace · Catálogo de recambios de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces. Encuentra la pieza que necesitas y contacta directamente con el desguace por WhatsApp.">
+<meta name="keywords" content="desguace andalucia, recambios usados, piezas coche segunda mano, AAD, CAT centro autorizado tratamiento">
+<title>Red Desguace · Recambios de los 142 desguaces autorizados de Andalucía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+
+<!-- Cabecera -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">AAD</div>
+      <div class="brand-text">
+        <strong>Red Desguace</strong>
+        <span>Asociación Andaluza de Desguaces</span>
+      </div>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html" class="active">Catálogo</a>
+      <a href="socios.html">Socios</a>
+      <a href="sobre.html">Sobre la AAD</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero con buscador -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="kicker">142 desguaces autorizados de Andalucía</div>
+    <h1>Encuentra el <em>recambio</em> que necesitas</h1>
+    <p class="hero-sub">Stock real, actualizado al día. Contacta directamente con el desguace por WhatsApp.</p>
+    <form class="hero-search" role="search" onsubmit="event.preventDefault(); aplicarBusqueda();">
+      <svg class="hero-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="busqueda" placeholder="Marca, modelo, referencia o código..." autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+    <div class="hero-stats">
+      <div><strong id="stat-piezas">—</strong><span>piezas</span></div>
+      <div><strong>142</strong><span>desguaces</span></div>
+      <div><strong id="stat-modelos">—</strong><span>modelos</span></div>
+      <div><strong>hoy</strong><span>actualizado</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Cuerpo principal: filtros + rejilla -->
+<main class="layout">
+
+  <!-- Sidebar de filtros -->
+  <aside class="filters">
+    <div class="filter-group">
+      <h4>Familia</h4>
+      <div id="filtros-familia" class="filter-list"></div>
+    </div>
+    <div class="filter-group">
+      <h4>Marca</h4>
+      <div id="filtros-marca" class="filter-list"></div>
+    </div>
+    <div class="filter-group">
+      <h4>Año del vehículo</h4>
+      <div class="year-range">
+        <input type="number" id="ano-desde" placeholder="Desde" min="1980" max="2026">
+        <input type="number" id="ano-hasta" placeholder="Hasta" min="1980" max="2026">
+      </div>
+    </div>
+    <div class="filter-group">
+      <h4>Desguace</h4>
+      <div class="filter-list">
+        <label><input type="checkbox" checked disabled> ReciclaCAT (Sevilla)</label>
+      </div>
+      <p class="filter-note">En esta demo solo se muestran piezas de ReciclaCAT. En la versión final estarán los 142 socios.</p>
+    </div>
+    <button class="btn-clear" onclick="limpiarFiltros()">Limpiar filtros</button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <section class="results">
+    <div class="toolbar">
+      <div class="count">
+        <strong id="count-resultados">—</strong> piezas encontradas
+        <span id="filtros-activos" class="filters-active"></span>
+      </div>
+      <select id="orden" onchange="reordenar()">
+        <option value="relevancia">Relevancia</option>
+        <option value="precio-asc">Precio: menor a mayor</option>
+        <option value="precio-desc">Precio: mayor a menor</option>
+      </select>
+    </div>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando catálogo de piezas...</p>
+    </div>
+
+    <div id="grid" class="grid" style="display:none;"></div>
+
+    <div id="empty" class="empty" style="display:none;">
+      <p>No se encontraron piezas con esos filtros.</p>
+      <button onclick="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+
+    <div id="paginacion" class="paginacion" style="display:none;">
+      <button id="btn-prev" onclick="paginaAnterior()">← Anterior</button>
+      <span id="info-pagina">Página 1 de 1</span>
+      <button id="btn-next" onclick="paginaSiguiente()">Siguiente →</button>
+    </div>
+  </section>
+</main>
+
+<!-- Pie -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>Red Desguace</strong>
+      <p>Plataforma común de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces (AAD).</p>
+    </div>
+    <div class="footer-col">
+      <strong>Demo en construcción</strong>
+      <p>Esta es una versión de muestra con datos reales de un socio (ReciclaCAT, Sevilla). En la versión definitiva estarán los 142 socios.</p>
+    </div>
+    <div class="footer-col">
+      <strong>Contacto</strong>
+      <p><a href="mailto:info@reddesguace.com">info@reddesguace.com</a></p>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Asociación Andaluza de Desguaces</span>
+    <span>Todos los socios son Centros Autorizados de Tratamiento (CAT)</span>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/catalogo.js"></script>
+</body>
+</html>

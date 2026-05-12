@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Socios · Red Desguace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, var(--aad-mid) 0%, var(--aad-dark) 100%);
+    color: white;
+    padding: 48px 24px;
+    text-align: center;
+  }
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+  .page-hero p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: rgba(255,255,255,0.85);
+  }
+  .socios-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .socio-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    border: 1px solid var(--border-soft);
+  }
+  .socio-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--aad-soft);
+  }
+  .socio-card.demo {
+    border: 2px solid var(--aad-mid);
+    background: var(--aad-pale);
+  }
+  .socio-avatar {
+    width: 48px;
+    height: 48px;
+    background: var(--aad-dark);
+    color: white;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .socio-card.demo .socio-avatar {
+    background: var(--aad-mid);
+  }
+  .socio-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .socio-city {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+  .socio-meta {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .socio-pill {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    background: var(--bg);
+    color: var(--text-mid);
+  }
+  .socio-pill.cat {
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+  }
+  .socio-pill.active {
+    background: #D6F5DD;
+    color: #176C36;
+  }
+  .info-banner {
+    max-width: 1280px;
+    margin: 24px auto 0;
+    padding: 16px 24px;
+    background: #FFF9E6;
+    border: 1px solid #F5E5A0;
+    border-radius: var(--radius);
+    font-size: 13px;
+    color: #7A5C00;
+  }
+  .info-banner strong { color: #5A4400; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">AAD</div>
+      <div class="brand-text">
+        <strong>Red Desguace</strong>
+        <span>Asociación Andaluza de Desguaces</span>
+      </div>
+    </a>
+    <nav class="topbar-nav">
+      <a href="index.html">Catálogo</a>
+      <a href="socios.html" class="active">Socios</a>
+      <a href="sobre.html">Sobre la AAD</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <h1>Los 142 desguaces de la AAD</h1>
+  <p>Todos los socios son Centros Autorizados de Tratamiento (CAT). Trabajamos siguiendo la normativa medioambiental y de reciclaje del Real Decreto 20/2017.</p>
+</section>
+
+<div class="info-banner">
+  <strong>Demo en construcción.</strong> En esta versión solo aparece un socio de ejemplo (ReciclaCAT, Sevilla). En la versión definitiva aparecerán los 142 socios con un mapa interactivo de Andalucía y filtros por provincia.
+</div>
+
+<section class="socios-grid">
+
+  <!-- Socio destacado (el único real de la demo) -->
+  <div class="socio-card demo">
+    <div class="socio-avatar">RC</div>
+    <div class="socio-name">ReciclaCAT</div>
+    <div class="socio-city">📍 Sevilla</div>
+    <div class="socio-meta">
+      <span class="socio-pill cat">CAT</span>
+      <span class="socio-pill active">Activo</span>
+      <span class="socio-pill">127.452 piezas</span>
+    </div>
+  </div>
+
+  <!-- Placeholders del resto -->
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Almería</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Cádiz</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Córdoba</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Granada</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Huelva</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Jaén</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card">
+    <div class="socio-avatar" style="opacity:0.5;">?</div>
+    <div class="socio-name" style="color:var(--text-soft);">Pendiente de incorporación</div>
+    <div class="socio-city">Málaga</div>
+    <div class="socio-meta"><span class="socio-pill">CAT</span></div>
+  </div>
+  <div class="socio-card" style="grid-column: span 2; display:flex; align-items:center; justify-content:center; background: var(--bg); border: 2px dashed var(--border);">
+    <p style="text-align:center; color:var(--text-mid); font-size:14px;">
+      <strong style="color:var(--aad-dark); display:block; font-family:var(--font-display); font-size:18px; margin-bottom:4px;">+ 134 socios</strong>
+      Los 142 socios aparecerán aquí
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>Red Desguace</strong>
+      <p>Plataforma común de los 142 desguaces autorizados de la Asociación Andaluza de Desguaces (AAD).</p>
+    </div>
+    <div class="footer-col">
+      <strong>Demo en construcción</strong>
+      <p>Esta es una versión de muestra con datos reales de un socio (ReciclaCAT, Sevilla). En la versión definitiva estarán los 142 socios.</p>
+    </div>
+    <div class="footer-col">
+      <strong>Contacto</strong>
+      <p><a href="mailto:info@reddesguace.com">info@reddesguace.com</a></p>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 Asociación Andaluza de Desguaces</span>
+    <span>Todos los socios son Centros Autorizados de Tratamiento (CAT)</span>
+  </div>
+</footer>
+
+</body>
+</html>
