@@ -322,6 +322,9 @@ function renderFiltrosActivos() {
   document.getElementById('filtros-activos').textContent = tags.length
     ? '· ' + tags.join(' · ')
     : '';
+  
+  // Actualizar también el badge del botón móvil
+  actualizarBadgeFiltros();
 }
 
 // =====================================================
@@ -351,3 +354,39 @@ function escapar(s) {
   if (!s) return '';
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
+
+// =====================================================
+// PANEL FILTROS MÓVIL
+// =====================================================
+function abrirFiltrosMobile() {
+  document.getElementById('filters').classList.add('open');
+  document.getElementById('filters-overlay').classList.add('open');
+  document.body.classList.add('filters-open');
+}
+
+function cerrarFiltrosMobile() {
+  document.getElementById('filters').classList.remove('open');
+  document.getElementById('filters-overlay').classList.remove('open');
+  document.body.classList.remove('filters-open');
+}
+
+// Actualiza el contador del botón móvil (badge con número de filtros activos)
+function actualizarBadgeFiltros() {
+  const count = state.filtros.familias.size 
+              + state.filtros.marcas.size
+              + (state.filtros.anoDesde ? 1 : 0)
+              + (state.filtros.anoHasta ? 1 : 0);
+  const badge = document.getElementById('badge-filtros');
+  if (!badge) return;
+  if (count > 0) {
+    badge.textContent = count;
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// Cerrar panel con tecla Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cerrarFiltrosMobile();
+});

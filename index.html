@@ -54,8 +54,15 @@
 <!-- Cuerpo principal: filtros + rejilla -->
 <main class="layout">
 
-  <!-- Sidebar de filtros -->
-  <aside class="filters">
+  <!-- Overlay oscuro para cerrar panel en móvil -->
+  <div class="filters-overlay" id="filters-overlay" onclick="cerrarFiltrosMobile()"></div>
+
+  <!-- Sidebar de filtros (panel lateral en móvil) -->
+  <aside class="filters" id="filters">
+    <div class="filters-header-mobile">
+      <strong>Filtros</strong>
+      <button class="filters-close" onclick="cerrarFiltrosMobile()" aria-label="Cerrar filtros">×</button>
+    </div>
     <div class="filter-group">
       <h4>Familia</h4>
       <div id="filtros-familia" class="filter-list"></div>
@@ -79,11 +86,17 @@
       <p class="filter-note">En esta demo solo se muestran piezas de ReciclaCAT. En la versión final estarán los 142 socios.</p>
     </div>
     <button class="btn-clear" onclick="limpiarFiltros()">Limpiar filtros</button>
+    <button class="btn-aplicar-mobile" onclick="cerrarFiltrosMobile()">Ver resultados</button>
   </aside>
 
   <!-- Contenido principal -->
   <section class="results">
     <div class="toolbar">
+      <button class="btn-filtros-mobile" onclick="abrirFiltrosMobile()" aria-label="Abrir filtros">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        Filtros
+        <span class="badge-filtros" id="badge-filtros" style="display:none;">0</span>
+      </button>
       <div class="count">
         <strong id="count-resultados">—</strong> piezas encontradas
         <span id="filtros-activos" class="filters-active"></span>

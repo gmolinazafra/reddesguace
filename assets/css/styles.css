@@ -872,18 +872,149 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* =====================================================
-   RESPONSIVE
+   ELEMENTOS DE FILTROS MÓVIL (ocultos en escritorio)
+   ===================================================== */
+.btn-filtros-mobile {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--aad-dark);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+}
+.btn-filtros-mobile:hover { background: #0F2920; }
+.btn-filtros-mobile .badge-filtros {
+  background: var(--aad-accent);
+  color: var(--aad-dark);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 100px;
+  margin-left: 2px;
+}
+
+.filters-header-mobile { display: none; }
+.filters-overlay { display: none; }
+.btn-aplicar-mobile { display: none; }
+
+/* =====================================================
+   RESPONSIVE — TABLET (901–600px)
    ===================================================== */
 @media (max-width: 900px) {
   .hero h1 { font-size: 32px; }
   .hero-stats { gap: 24px; }
   .hero-stats strong { font-size: 20px; }
-  .layout { grid-template-columns: 1fr; }
-  .filters {
-    position: static;
-    margin-bottom: 0;
+  
+  /* Layout: una columna, filtros pasan a ser panel modal */
+  .layout {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 0;
   }
-  .ficha { grid-template-columns: 1fr; gap: 24px; }
+
+  /* Cabecera del panel móvil */
+  .filters-header-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .filters-header-mobile strong {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--aad-dark);
+  }
+  .filters-close {
+    width: 32px;
+    height: 32px;
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 50%;
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  /* Panel deslizable: oculto por defecto */
+  .filters {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(86%, 360px);
+    max-width: 360px;
+    z-index: 200;
+    border-radius: 0;
+    padding: 16px;
+    overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-out;
+  }
+  .filters.open {
+    transform: translateX(0);
+  }
+  .filter-list { max-height: none; }
+
+  /* Overlay oscuro detrás del panel */
+  .filters-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .filters-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Botón "Filtros" visible en móvil */
+  .btn-filtros-mobile { display: inline-flex; }
+
+  /* Botón "Ver resultados" abajo del panel */
+  .btn-aplicar-mobile {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--aad-mid);
+    color: var(--white);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 16px;
+    cursor: pointer;
+  }
+  .btn-aplicar-mobile:hover { background: var(--aad-dark); }
+
+  /* Toolbar reorganizada en móvil: filtros izquierda, orden derecha */
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .toolbar .count {
+    width: 100%;
+    order: 3;
+    font-size: 13px;
+  }
+
+  /* Otros ajustes */
+  .ficha { grid-template-columns: 1fr; gap: 24px; padding: 16px; }
   .ficha-details h1 { font-size: 24px; }
   .ficha-price .precio { font-size: 32px; }
   .footer-inner { grid-template-columns: 1fr; gap: 20px; }
@@ -891,16 +1022,28 @@ img { max-width: 100%; height: auto; display: block; }
   .topbar-nav { gap: 4px; }
   .topbar-nav a { padding: 6px 10px; font-size: 12px; }
   .brand-text span { display: none; }
+
+  /* Bloquear scroll del body cuando panel abierto */
+  body.filters-open {
+    overflow: hidden;
+  }
 }
 
+/* =====================================================
+   RESPONSIVE — MÓVIL (≤600px)
+   ===================================================== */
 @media (max-width: 600px) {
   .hero { padding: 40px 16px; }
   .hero h1 { font-size: 26px; }
   .hero-search { padding: 4px; }
   .hero-search input { font-size: 14px; padding: 10px; }
   .hero-search button { padding: 10px 16px; }
-  .layout { padding: 16px; }
+  .layout { padding: 12px; }
   .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .card-title { font-size: 12px; }
   .card-price { font-size: 16px; }
+  
+  /* Toolbar más compacta */
+  .toolbar select { font-size: 12px; padding: 6px 8px; }
+  .btn-filtros-mobile { padding: 8px 12px; font-size: 12px; }
 }
