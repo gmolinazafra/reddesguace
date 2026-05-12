@@ -677,6 +677,406 @@
   .info-fotos strong {
     font-weight: 700;
   }
+
+  /* ===================================================
+     SECCIÓN MIS PIEZAS (alta de piezas)
+     =================================================== */
+
+  /* Cabecera con resumen y dos botones grandes */
+  .piezas-resumen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .piezas-opcion {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .piezas-opcion:hover {
+    border-color: var(--aad-mid);
+    background: var(--aad-pale);
+  }
+  .piezas-opcion.active {
+    border-color: var(--aad-mid);
+    background: var(--aad-pale);
+  }
+  .piezas-opcion .icon-wrap {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--aad-dark);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .piezas-opcion.active .icon-wrap {
+    background: var(--aad-mid);
+  }
+  .piezas-opcion .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+  }
+  .piezas-opcion .sub {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+
+  /* Vista de carga masiva */
+  .descargar-plantilla {
+    background: linear-gradient(135deg, var(--aad-dark) 0%, var(--aad-mid) 100%);
+    color: white;
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .descargar-plantilla .info-zone {
+    flex: 1;
+  }
+  .descargar-plantilla .info-zone h4 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .descargar-plantilla .info-zone p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .descargar-plantilla a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--aad-dark);
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .descargar-plantilla a:hover {
+    background: var(--aad-accent);
+    transform: translateY(-1px);
+  }
+
+  /* Pasos numerados de carga masiva */
+  .pasos-masiva {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0 18px;
+  }
+  .paso {
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    border-top: 3px solid var(--aad-mid);
+  }
+  .paso .num {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: var(--aad-mid);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 22px;
+    margin-bottom: 8px;
+  }
+  .paso .ttl {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--aad-dark);
+    margin-bottom: 3px;
+  }
+  .paso .desc {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+
+  /* Doble zona de drop: Excel y ZIP de fotos */
+  .doble-drop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .drop-mini {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    text-align: center;
+    background: var(--bg-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .drop-mini:hover {
+    border-color: var(--aad-mid);
+    background: var(--aad-pale);
+  }
+  .drop-mini.ready {
+    border-style: solid;
+    border-color: var(--aad-mid);
+    background: var(--aad-pale);
+  }
+  .drop-mini .ic {
+    color: var(--aad-mid);
+    margin-bottom: 8px;
+  }
+  .drop-mini .ttl-d {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+  }
+  .drop-mini .desc-d {
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+  .drop-mini .file-ready {
+    font-size: 11px;
+    color: var(--aad-dark);
+    font-weight: 600;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* Botones de acción carga masiva */
+  .acciones-masiva {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: flex-end;
+  }
+  .btn-secundario, .btn-primario {
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-secundario {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--aad-dark);
+  }
+  .btn-secundario:hover {
+    background: var(--bg);
+  }
+  .btn-primario {
+    background: var(--aad-dark);
+    border: 1px solid var(--aad-dark);
+    color: white;
+  }
+  .btn-primario:hover {
+    background: #0F2920;
+  }
+  .btn-primario:disabled {
+    background: var(--border);
+    border-color: var(--border);
+    color: var(--text-soft);
+    cursor: not-allowed;
+  }
+
+  /* Vista del formulario de alta de pieza individual */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+  .form-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .form-fields .full {
+    grid-column: span 2;
+  }
+  .form-fields label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .form-fields label .req {
+    color: #C44536;
+    margin-left: 2px;
+  }
+  .form-fields input, .form-fields select, .form-fields textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    background: white;
+    transition: border-color 0.15s;
+  }
+  .form-fields input:focus, .form-fields select:focus, .form-fields textarea:focus {
+    outline: none;
+    border-color: var(--aad-mid);
+  }
+  .form-fields textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  .form-fields .help-text {
+    font-size: 10px;
+    color: var(--text-soft);
+    margin-top: 3px;
+  }
+
+  /* Drop para fotos del formulario individual */
+  .form-fotos-zone {
+    background: var(--bg-soft);
+    border-radius: var(--radius);
+    padding: 14px;
+    height: fit-content;
+    position: sticky;
+    top: 80px;
+  }
+  .form-fotos-zone h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .form-fotos-drop {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .form-fotos-drop:hover {
+    border-color: var(--aad-mid);
+  }
+  .form-fotos-drop .ic-f {
+    color: var(--aad-mid);
+    margin-bottom: 6px;
+  }
+  .form-fotos-drop .txt-f {
+    font-size: 12px;
+    color: var(--aad-dark);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .form-fotos-drop .sub-f {
+    font-size: 10px;
+    color: var(--text-soft);
+  }
+  .form-fotos-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .form-foto-thumb {
+    aspect-ratio: 1/1;
+    background: white;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .form-foto-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .form-foto-thumb .rm {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  .form-acciones {
+    grid-column: span 2;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 6px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* Responsive para Mis piezas */
+  @media (max-width: 900px) {
+    .piezas-resumen {
+      grid-template-columns: 1fr;
+    }
+    .descargar-plantilla {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .pasos-masiva {
+      grid-template-columns: 1fr;
+    }
+    .doble-drop {
+      grid-template-columns: 1fr;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-fields {
+      grid-template-columns: 1fr;
+    }
+    .form-fields .full {
+      grid-column: span 1;
+    }
+    .form-fotos-zone {
+      position: static;
+    }
+    .form-acciones {
+      grid-column: span 1;
+    }
+  }
 </style>
 </head>
 <body>
@@ -856,6 +1256,226 @@
         <div class="map-actions">
           <span class="more">+ 3 campos más (Ref. visual, Ref. catálogo, Imágenes)</span>
           <button class="edit-btn">Editar mapeo</button>
+        </div>
+      </div>
+
+      <!-- Mis piezas (alta) -->
+      <div class="box">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/></svg>
+          Mis piezas
+          <span class="pill warning">Demo no funcional</span>
+        </h3>
+
+        <p style="font-size:13px; color:var(--text-mid); line-height:1.6; margin-bottom:14px;">
+          Da de alta tus piezas en Red Desguace. Tienes dos formas: <strong>carga masiva</strong> con una plantilla Excel (ideal para dar de alta cientos de piezas de golpe) o <strong>alta directa</strong> desde el panel pieza por pieza (ideal para añadir novedades del día a día).
+        </p>
+
+        <!-- Selector de modo -->
+        <div class="piezas-resumen">
+          <div class="piezas-opcion active" onclick="cambiarModoPieza('masiva', this)">
+            <div class="icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <div>
+              <div class="title">Carga masiva con plantilla</div>
+              <div class="sub">Descarga la plantilla Excel, rellénala con tus piezas y súbela con la carpeta de fotos.</div>
+            </div>
+          </div>
+          <div class="piezas-opcion" onclick="cambiarModoPieza('individual', this)">
+            <div class="icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <div>
+              <div class="title">Añadir una pieza</div>
+              <div class="sub">Formulario web pieza por pieza con sus fotos. Ideal para piezas sueltas del día a día.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISTA: Carga masiva -->
+        <div id="vista-masiva">
+          <div class="descargar-plantilla">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div class="info-zone">
+              <h4>Plantilla oficial de Red Desguace</h4>
+              <p>Excel con 3 pestañas: instrucciones completas, tabla a rellenar y referencia de familias/marcas admitidas. Pesa 13 KB.</p>
+            </div>
+            <a href="assets/Plantilla_Red_Desguace.xlsx" download>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Descargar plantilla
+            </a>
+          </div>
+
+          <!-- Pasos -->
+          <div class="pasos-masiva">
+            <div class="paso">
+              <div class="num">1</div>
+              <div class="ttl">Rellena la plantilla</div>
+              <div class="desc">Una fila por pieza. Los campos con * son obligatorios.</div>
+            </div>
+            <div class="paso">
+              <div class="num">2</div>
+              <div class="ttl">Prepara las fotos</div>
+              <div class="desc">Nómbralas con la referencia interna: <code style="background:white;padding:1px 4px;border-radius:3px;font-size:10px;">1788203.jpg</code>, <code style="background:white;padding:1px 4px;border-radius:3px;font-size:10px;">1788203_2.jpg</code>...</div>
+            </div>
+            <div class="paso">
+              <div class="num">3</div>
+              <div class="ttl">Sube ambos archivos</div>
+              <div class="desc">Arrastra la plantilla y un ZIP con las fotos. Validamos antes de importar.</div>
+            </div>
+          </div>
+
+          <!-- Drop zones -->
+          <div class="doble-drop">
+            <div class="drop-mini">
+              <svg class="ic" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div class="ttl-d">Subir plantilla Excel</div>
+              <div class="desc-d">Arrastra aquí el archivo .xlsx o <a style="color:var(--aad-dark); cursor:pointer; font-weight:600;">selecciónalo</a></div>
+            </div>
+            <div class="drop-mini ready">
+              <svg class="ic" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              <div class="ttl-d">Subir ZIP con las fotos</div>
+              <div class="desc-d">Arrastra aquí el ZIP con todas tus fotos nombradas con el refid</div>
+              <div class="file-ready">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                fotos_reciclacat.zip · 247 archivos · 38 MB
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="acciones-masiva">
+            <button class="btn-secundario">Validar antes de importar</button>
+            <button class="btn-primario" disabled>Importar (sube primero la plantilla)</button>
+          </div>
+        </div>
+
+        <!-- VISTA: Alta individual -->
+        <div id="vista-individual" style="display:none;">
+          <p style="font-size:13px; color:var(--text-mid); margin-bottom:14px;">
+            Rellena los datos de la pieza. La <strong>referencia interna</strong> tiene que ser única (no puede coincidir con ninguna otra pieza tuya).
+          </p>
+
+          <div class="form-grid">
+            <!-- Campos -->
+            <div class="form-fields">
+              <div>
+                <label>Ref. interna <span class="req">*</span></label>
+                <input type="text" placeholder="Ej: 1788206" value="">
+                <div class="help-text">Tu código único de la pieza. Verificamos que no esté en uso.</div>
+              </div>
+              <div>
+                <label>Precio (€) <span class="req">*</span></label>
+                <input type="text" placeholder="Ej: 22,30">
+              </div>
+              <div>
+                <label>Familia <span class="req">*</span></label>
+                <select>
+                  <option value="">Selecciona una familia...</option>
+                  <option>INTERIOR</option>
+                  <option>ELECTRICIDAD</option>
+                  <option>CARROCERÍA LATERALES</option>
+                  <option>SUSPENSIÓN / FRENOS</option>
+                  <option>CARROCERÍA FRONTAL</option>
+                  <option selected>MOTOR / ADMISIÓN / ESCAPE</option>
+                  <option>DIRECCIÓN / TRANSMISIÓN</option>
+                  <option>CLIMATIZACIÓN</option>
+                  <option>ALUMBRADO</option>
+                  <option>ACCESORIOS</option>
+                  <option>CARROCERÍA TRASERA</option>
+                  <option>CAMBIO / EMBRAGUE</option>
+                  <option>GENERICO</option>
+                </select>
+              </div>
+              <div>
+                <label>Artículo <span class="req">*</span></label>
+                <input type="text" placeholder="Ej: TAPA MOTOR" value="TAPA MOTOR">
+              </div>
+              <div>
+                <label>Marca <span class="req">*</span></label>
+                <select>
+                  <option value="">Selecciona...</option>
+                  <option>RENAULT</option>
+                  <option>FORD</option>
+                  <option>CITROEN</option>
+                  <option>OPEL</option>
+                  <option>VOLKSWAGEN</option>
+                  <option>PEUGEOT</option>
+                  <option>MERCEDES-BENZ</option>
+                  <option selected>SEAT</option>
+                  <option>FIAT</option>
+                  <option>AUDI</option>
+                  <option>BMW</option>
+                </select>
+              </div>
+              <div>
+                <label>Modelo <span class="req">*</span></label>
+                <input type="text" placeholder="Ej: LEON (1P1)" value="LEON (1P1)">
+              </div>
+              <div>
+                <label>Año desde</label>
+                <input type="number" placeholder="2005" value="2005">
+              </div>
+              <div>
+                <label>Año hasta</label>
+                <input type="number" placeholder="2011" value="2011">
+              </div>
+              <div>
+                <label>Motor</label>
+                <input type="text" placeholder="Ej: BKD" value="BKD">
+              </div>
+              <div>
+                <label>Año pieza</label>
+                <input type="number" placeholder="Ej: 2006" value="2006">
+              </div>
+              <div>
+                <label>Ref. visual</label>
+                <input type="text" placeholder="Tu segunda referencia">
+              </div>
+              <div>
+                <label>Ref. catálogo</label>
+                <input type="text" placeholder="Ref. del fabricante">
+              </div>
+              <div class="full">
+                <label>Nota pública (opcional)</label>
+                <textarea rows="2" placeholder="Cualquier observación que verá el comprador (estado, garantía...)"></textarea>
+              </div>
+
+              <!-- Acciones -->
+              <div class="form-acciones">
+                <button class="btn-secundario">Guardar y añadir otra</button>
+                <button class="btn-primario">Guardar pieza</button>
+              </div>
+            </div>
+
+            <!-- Zona de fotos -->
+            <div class="form-fotos-zone">
+              <h4>Fotos de la pieza</h4>
+              <div class="form-fotos-drop">
+                <svg class="ic-f" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <div class="txt-f">Arrastra fotos aquí</div>
+                <div class="sub-f">JPG, PNG · máx 10 MB · hasta 8 por pieza</div>
+              </div>
+              <div class="form-fotos-preview">
+                <div class="form-foto-thumb">
+                  <img src="assets/logo-reciclacat.jpg" alt="">
+                  <span class="rm">×</span>
+                </div>
+                <div class="form-foto-thumb">
+                  <img src="assets/logo-reciclacat.jpg" alt="">
+                  <span class="rm">×</span>
+                </div>
+                <div class="form-foto-thumb">
+                  <img src="assets/logo-reciclacat.jpg" alt="">
+                  <span class="rm">×</span>
+                </div>
+              </div>
+              <div style="font-size:11px; color:var(--text-soft); margin-top:8px; text-align:center;">
+                3 fotos seleccionadas
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1082,6 +1702,14 @@
     document.querySelectorAll('.fotos-tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-' + id).classList.add('active');
+  }
+
+  // Cambio entre modos de Mis piezas (carga masiva vs alta individual)
+  function cambiarModoPieza(modo, el) {
+    document.querySelectorAll('.piezas-opcion').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('vista-masiva').style.display = modo === 'masiva' ? 'block' : 'none';
+    document.getElementById('vista-individual').style.display = modo === 'individual' ? 'block' : 'none';
   }
 </script>
 
