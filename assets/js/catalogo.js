@@ -317,6 +317,17 @@ async function aplicarBusqueda() {
     // Siempre filtramos sobre la lista completa (cargada al inicio)
     const piezas = state.todasLasPiezas;
 
+    // Preparar términos de búsqueda: separar por espacios, normalizar acentos,
+    // ignorar palabras de 1 carácter para evitar ruido.
+    let terminosBusqueda = [];
+    if (state.filtros.busqueda) {
+      terminosBusqueda = state.filtros.busqueda
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // quitar acentos
+        .split(/\s+/)
+        .filter(t => t.length > 0);
+    }
+
     if (!hayFiltrosActivos()) {
       // Sin filtros: mostrar todas las piezas
       state.resultados = piezas;
@@ -327,11 +338,23 @@ async function aplicarBusqueda() {
         if (state.filtros.modelos.size > 0 && !state.filtros.modelos.has(p.mo)) return false;
         if (state.filtros.anoDesde && p.af && p.af < state.filtros.anoDesde) return false;
         if (state.filtros.anoHasta && p.ai && p.ai > state.filtros.anoHasta) return false;
-        if (state.filtros.busqueda) {
-          const q = state.filtros.busqueda;
+        
+        // Búsqueda multi-palabra: TODAS las palabras deben aparecer en
+        // alguno de los campos (artículo, marca, modelo, motor, familia,
+        // refid, ref. visual, ref. catálogo). Orden indiferente.
+        // Ej. "motor bkd" → encuentra "TAPA MOTOR / SEAT / LEON / BKD / MOTOR / ..."
+        if (terminosBusqueda.length > 0) {
           const campos = [p.t, p.m, p.mo, p.mt, p.f, p.i, p.rv, p.rc];
-          const texto = campos.filter(Boolean).join(' ').toLowerCase();
-          if (!texto.includes(q)) return false;
+          const texto = campos
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          
+          // Cada término debe estar en el texto. Si falta uno, descartamos.
+          for (const termino of terminosBusqueda) {
+            if (!texto.includes(termino)) return false;
+          }
         }
         return true;
       });
