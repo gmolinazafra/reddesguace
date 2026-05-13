@@ -113,6 +113,61 @@
     color: #7A5C00;
   }
   .info-banner strong { color: #5A4400; }
+
+  /* ============================================
+     RESPONSIVE MÓVIL
+     ============================================ */
+  @media (max-width: 600px) {
+    .page-hero {
+      padding: 36px 16px;
+    }
+    .page-hero h1 {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    .page-hero p {
+      font-size: 13px;
+    }
+    .info-banner {
+      margin: 16px 12px 0;
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    /* Grid: 2 columnas pequeñas para que quepan tarjetas estrechas */
+    .socios-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 16px 12px;
+    }
+    .socio-card {
+      padding: 14px 12px;
+      min-width: 0;
+    }
+    .socio-card h3,
+    .socio-card .socio-name {
+      font-size: 14px;
+      word-wrap: break-word;
+    }
+    .socio-card .socio-city {
+      font-size: 12px;
+    }
+    .socio-pill {
+      font-size: 10px;
+      padding: 3px 7px;
+    }
+    .socio-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    /* En móviles MUY pequeños, una sola columna */
+    .socios-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 </head>
 <body>

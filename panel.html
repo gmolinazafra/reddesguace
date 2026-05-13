@@ -384,23 +384,29 @@
       min-width: 0;
       max-width: 100%;
     }
-    /* Menú panel: en móvil se envuelve en 2 líneas en lugar de scroll
-       horizontal. Más fácil de usar y evita problemas de zoom. */
+    /* Menú panel: en móvil se convierte en barra horizontal con scroll
+       interno (no afecta al body). Los enlaces NO se envuelven, se
+       deslizan con el dedo. */
     .panel-menu {
       position: static;
       display: flex;
-      flex-wrap: wrap;
-      overflow: visible;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
       padding: 6px;
       gap: 2px;
       width: 100%;
       max-width: 100%;
       min-width: 0;
     }
+    .panel-menu::-webkit-scrollbar { height: 3px; }
+    .panel-menu::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
     .panel-menu a {
       border-left: none;
       border-bottom: 2px solid transparent;
-      padding: 7px 10px;
+      padding: 7px 12px;
       flex-shrink: 0;
       white-space: nowrap;
       font-size: 12px;
