@@ -133,32 +133,49 @@
       padding: 12px 14px;
       font-size: 12px;
     }
-    /* Grid: 2 columnas pequeñas para que quepan tarjetas estrechas */
+    /* Grid: 2 columnas con alturas alineadas (stretch) */
     .socios-grid {
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       padding: 16px 12px;
+      align-items: stretch;
     }
     .socio-card {
-      padding: 14px 12px;
+      padding: 12px 11px;
       min-width: 0;
-    }
-    .socio-card h3,
-    .socio-card .socio-name {
-      font-size: 14px;
-      word-wrap: break-word;
-    }
-    .socio-card .socio-city {
-      font-size: 12px;
-    }
-    .socio-pill {
-      font-size: 10px;
-      padding: 3px 7px;
+      display: flex;
+      flex-direction: column;
     }
     .socio-avatar {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       font-size: 11px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+    .socio-name {
+      font-size: 13px;
+      line-height: 1.25;
+      margin-bottom: 3px;
+      word-wrap: break-word;
+    }
+    .socio-card.demo .socio-name {
+      /* En móvil ReciclaCAT más compacto */
+      font-size: 14px;
+    }
+    .socio-city {
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    /* Pills más compactos para caber 2-3 en la misma línea */
+    .socio-meta {
+      gap: 4px;
+      margin-top: auto;  /* empuja los pills al fondo para alinear todas las tarjetas */
+    }
+    .socio-pill {
+      font-size: 9px;
+      padding: 2px 6px;
+      letter-spacing: 0.2px;
     }
   }
 
