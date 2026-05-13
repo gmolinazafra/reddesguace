@@ -43,7 +43,7 @@ function renderFicha(p) {
     <div class="ficha-placeholder">
       <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo-grande">
       <div class="placeholder-name-grande">ReciclaCAT</div>
-      <div class="placeholder-city-grande">Sevilla · Centro Autorizado de Tratamiento</div>
+      <div class="placeholder-city-grande">Málaga · Centro Autorizado de Tratamiento</div>
     </div>
   `;
   
@@ -122,7 +122,7 @@ function renderFicha(p) {
       <div class="avatar">RC</div>
       <div class="info">
         <div class="name">ReciclaCAT</div>
-        <div class="city">📍 Sevilla · Centro Autorizado de Tratamiento</div>
+        <div class="city">📍 Málaga · Centro Autorizado de Tratamiento</div>
       </div>
       <div class="pill">CAT</div>
     </div>
@@ -186,7 +186,7 @@ window.reemplazaImgFichaFallida = function(imgEl) {
     placeholder.innerHTML = `
       <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo-grande">
       <div class="placeholder-name-grande">ReciclaCAT</div>
-      <div class="placeholder-city-grande">Sevilla · Centro Autorizado de Tratamiento</div>
+      <div class="placeholder-city-grande">Málaga · Centro Autorizado de Tratamiento</div>
     `;
     const badge = cont.querySelector('.badge');
     if (badge) cont.insertBefore(placeholder, badge);

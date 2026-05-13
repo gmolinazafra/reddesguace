@@ -519,7 +519,7 @@ function renderTarjeta(p) {
     <div class="card-placeholder">
       <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo">
       <div class="placeholder-name">ReciclaCAT</div>
-      <div class="placeholder-city">Sevilla · CAT</div>
+      <div class="placeholder-city">Málaga · CAT</div>
     </div>
   `;
 
@@ -546,7 +546,7 @@ function renderTarjeta(p) {
         }
         <div class="card-seller">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          ReciclaCAT · Sevilla
+          ReciclaCAT · Málaga
         </div>
       </div>
       <a href="${waURL}" class="card-wa" target="_blank" rel="noopener" onclick="event.stopPropagation();">
@@ -671,7 +671,7 @@ window.reemplazaImgFallida = function(imgEl) {
     placeholder.innerHTML = `
       <img src="assets/logo-reciclacat.jpg" alt="ReciclaCAT" class="placeholder-logo">
       <div class="placeholder-name">ReciclaCAT</div>
-      <div class="placeholder-city">Sevilla · CAT</div>
+      <div class="placeholder-city">Málaga · CAT</div>
     `;
     const badge = cont.querySelector('.card-badge');
     if (badge) cont.insertBefore(placeholder, badge);
