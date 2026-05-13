@@ -19,7 +19,10 @@
         <span>Asociación Andaluza de Desguaces</span>
       </div>
     </a>
-    <nav class="topbar-nav">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" onclick="toggleMenu()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <nav class="topbar-nav" id="topbar-nav">
       <a href="index.html" class="active">Catálogo</a>
       <a href="socios.html">Socios</a>
       <a href="panel.html">Panel socio</a>
@@ -28,6 +31,21 @@
     </nav>
   </div>
 </header>
+
+<div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
+
+<script>
+function toggleMenu() {
+  document.body.classList.toggle('menu-open');
+}
+// Cerrar menú al pulsar un enlace
+document.querySelectorAll('.topbar-nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.body.classList.remove('menu-open');
+  });
+});
+</script>
+
 
 <nav class="crumb" id="crumb">
   <a href="index.html">Catálogo</a><span>›</span><span id="crumb-text">Cargando...</span>
