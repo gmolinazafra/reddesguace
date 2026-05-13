@@ -47,6 +47,14 @@
 
 html { font-size: 16px; }
 
+/* Salvaguarda crítica móvil: prohibe que CUALQUIER elemento provoque
+   scroll horizontal o zoom-out automático del navegador.
+   Si algo se sale, se recorta limpiamente en lugar de empujar la página. */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text);

@@ -367,36 +367,188 @@
 
   /* Responsive panel */
   @media (max-width: 900px) {
-    .panel-layout {
-      grid-template-columns: 1fr;
+    .panel-wrap {
+      padding: 16px 12px;
+      max-width: 100%;
+      overflow-x: hidden;
     }
+    .panel-layout {
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
+    }
+    .panel-content {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .panel-content > * {
+      min-width: 0;
+      max-width: 100%;
+    }
+    /* Menú panel: en móvil se envuelve en 2 líneas en lugar de scroll
+       horizontal. Más fácil de usar y evita problemas de zoom. */
     .panel-menu {
       position: static;
       display: flex;
-      overflow-x: auto;
-      padding: 8px;
-      gap: 4px;
+      flex-wrap: wrap;
+      overflow: visible;
+      padding: 6px;
+      gap: 2px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
     .panel-menu a {
       border-left: none;
-      border-bottom: 3px solid transparent;
-      padding: 8px 12px;
+      border-bottom: 2px solid transparent;
+      padding: 7px 10px;
       flex-shrink: 0;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+    .panel-menu a svg {
+      width: 13px;
+      height: 13px;
     }
     .panel-menu a.active {
       border-left: none;
       border-bottom-color: var(--aad-mid);
     }
+    /* Tabs del gestor de fotos: igual, wrap en 2 líneas */
+    .fotos-tabs {
+      flex-wrap: wrap;
+      overflow: visible;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      gap: 0;
+    }
+    .fotos-tab {
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
     .metrics {
       grid-template-columns: repeat(2, 1fr);
+      min-width: 0;
+    }
+    .metric {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .metric .value {
+      font-size: 20px;
+      word-break: break-word;
     }
     .src-options {
       grid-template-columns: 1fr;
+      min-width: 0;
     }
     .panel-header {
       flex-direction: column;
       align-items: flex-start;
       gap: 12px;
+    }
+    /* Banner demo: que se vea bien y no se salga */
+    .demo-banner {
+      padding: 10px 16px;
+      font-size: 12px;
+    }
+    /* Cabecera del panel más compacta */
+    .panel-header h1 {
+      font-size: 22px;
+    }
+    /* Cajas internas con menos padding */
+    .box {
+      padding: 14px 16px;
+      min-width: 0;
+    }
+    .box h3 {
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+    /* Mapeo: las filas en columna en móvil */
+    .map-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .map-row svg.arrow {
+      display: none;
+    }
+    .map-row .val {
+      margin-left: 0;
+    }
+    /* Acciones de carga masiva: botones apilados */
+    .acciones-masiva {
+      flex-direction: column;
+    }
+    .acciones-masiva button {
+      width: 100%;
+    }
+    /* Formulario de alta de pieza: una columna */
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+    .form-fields {
+      grid-template-columns: 1fr;
+    }
+    .form-fields .full {
+      grid-column: span 1;
+    }
+    .form-fotos-zone {
+      position: static;
+    }
+    .form-acciones {
+      grid-column: span 1;
+      flex-direction: column;
+    }
+    .form-acciones button {
+      width: 100%;
+    }
+    /* WhatsApp input: columnas adaptables */
+    .wa-input {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .wa-input button {
+      width: 100%;
+    }
+    /* Banner descargar plantilla: una columna */
+    .descargar-plantilla {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      padding: 16px;
+    }
+    .descargar-plantilla a {
+      justify-content: center;
+    }
+    /* Pasos: una columna */
+    .pasos-masiva {
+      grid-template-columns: 1fr;
+    }
+    /* Drop zones: una columna */
+    .doble-drop {
+      grid-template-columns: 1fr;
+    }
+    /* Tabs gestor fotos: scroll horizontal */
+    .fotos-tabs {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .fotos-tab {
+      flex-shrink: 0;
+      font-size: 12px;
+      padding: 8px 12px;
+    }
+    /* Grid de fotos: 2 columnas en móvil */
+    .fotos-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    /* Programas: 2 columnas */
+    .programas-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
