@@ -1002,6 +1002,118 @@
     .ftp-sel-grid { grid-template-columns: 1fr; }
   }
 
+  /* ===================================================
+     PETICIONES DE COMPRADORES
+     =================================================== */
+  .pet-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--aad-mid);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    transition: all 0.15s;
+  }
+  .pet-card:hover {
+    border-color: var(--aad-soft);
+    border-left-color: var(--aad-mid);
+  }
+  .pet-card.contactada {
+    border-left-color: var(--border);
+    opacity: 0.7;
+  }
+  .pet-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .pet-top .pet-main {
+    flex: 1;
+    min-width: 200px;
+  }
+  .pet-pieza {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+  }
+  .pet-pieza .pet-tag {
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+  .pet-detalle {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+  .pet-fecha {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  .pet-acciones {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .pet-btn-wa, .pet-btn-mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .pet-btn-wa {
+    background: var(--aad-mid);
+    color: white;
+    border-color: var(--aad-mid);
+  }
+  .pet-btn-wa:hover { background: var(--aad-dark); border-color: var(--aad-dark); }
+  .pet-btn-mail {
+    background: white;
+    color: var(--aad-dark);
+    border-color: var(--aad-mid);
+  }
+  .pet-btn-mail:hover { background: var(--aad-pale); }
+  .pet-contacto {
+    font-size: 12px;
+    color: var(--text-soft);
+    padding: 8px 4px;
+  }
+  .pet-marcar {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--aad-dark);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .pet-vacio {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--text-soft);
+    font-size: 13px;
+  }
+
   /* Banner informativo dentro del bloque */
   .info-fotos {
     background: var(--aad-pale);
@@ -1500,6 +1612,10 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
       <a href="#">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         Fotos
+      </a>
+      <a href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Peticiones
       </a>
       <a href="#">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
@@ -2105,6 +2221,139 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
         </div>
       </div>
 
+      <!-- Peticiones de compradores -->
+      <div class="box">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Peticiones de compradores
+          <span class="pill warning">Demo no funcional</span>
+        </h3>
+
+        <p style="font-size:13px; color:var(--text-mid); line-height:1.6; margin-bottom:14px;">
+          Compradores que no encontraron su pieza en el catálogo. Si tienes alguna, <strong>contacta tú directamente</strong> con el comprador por WhatsApp o email. El trato es 100% tuyo: Red Desguace solo os pone en contacto.
+        </p>
+
+        <!-- Sub-pestañas -->
+        <div class="fotos-tabs">
+          <button class="fotos-tab active" onclick="cambiarTabPet('nuevas', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Nuevas
+            <span class="count">3</span>
+          </button>
+          <button class="fotos-tab" onclick="cambiarTabPet('contactadas', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            Contactadas
+            <span class="count">5</span>
+          </button>
+          <button class="fotos-tab" onclick="cambiarTabPet('archivadas', this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="4" rx="1"/><path d="M5 7v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+            Archivadas
+          </button>
+        </div>
+
+        <!-- Tab: Nuevas -->
+        <div class="fotos-tab-content active" id="pettab-nuevas">
+
+          <div class="pet-card">
+            <div class="pet-top">
+              <div class="pet-main">
+                <div class="pet-pieza">Paragolpes delantero · SEAT León (1P1)</div>
+                <div class="pet-detalle">Año 2008 · Motor BKD · Color gris plata<br>"Lo necesito con los anclajes de faro antiniebla, a ser posible con la rejilla."</div>
+              </div>
+              <span class="pet-fecha">Hace 2 h</span>
+            </div>
+            <div class="pet-acciones">
+              <a class="pet-btn-wa">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35"/></svg>
+                WhatsApp
+              </a>
+              <a class="pet-btn-mail">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+                Email
+              </a>
+              <span class="pet-contacto">Mateo R. · +34 6XX XXX 412</span>
+              <button class="pet-marcar" onclick="marcarContactada(this)">Marcar como contactada</button>
+            </div>
+          </div>
+
+          <div class="pet-card">
+            <div class="pet-top">
+              <div class="pet-main">
+                <div class="pet-pieza">Faro derecho · Renault Clio IV</div>
+                <div class="pet-detalle">Año 2015 · Versión LED<br>"Original Renault, no quiero adaptable."</div>
+              </div>
+              <span class="pet-fecha">Hace 5 h</span>
+            </div>
+            <div class="pet-acciones">
+              <a class="pet-btn-mail">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+                Email
+              </a>
+              <span class="pet-contacto">Laura G. · solo dejó email</span>
+              <button class="pet-marcar" onclick="marcarContactada(this)">Marcar como contactada</button>
+            </div>
+          </div>
+
+          <div class="pet-card">
+            <div class="pet-top">
+              <div class="pet-main">
+                <div class="pet-pieza">Caja de cambios · Ford Focus 1.6 TDCi</div>
+                <div class="pet-detalle">Año 2012 · 5 velocidades<br>"Busco una con pocos kilómetros, con garantía si es posible."</div>
+              </div>
+              <span class="pet-fecha">Ayer</span>
+            </div>
+            <div class="pet-acciones">
+              <a class="pet-btn-wa">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35"/></svg>
+                WhatsApp
+              </a>
+              <a class="pet-btn-mail">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+                Email
+              </a>
+              <span class="pet-contacto">Carlos M. · +34 6XX XXX 901</span>
+              <button class="pet-marcar" onclick="marcarContactada(this)">Marcar como contactada</button>
+            </div>
+          </div>
+
+          <div class="info-fotos">
+            <strong>Demo:</strong> estas peticiones son de ejemplo. En producción, cada vez que un comprador no encuentre una pieza y rellene el formulario "¿No encuentras tu recambio?" del catálogo, su petición aparecerá aquí automáticamente para todos los socios.
+          </div>
+        </div>
+
+        <!-- Tab: Contactadas -->
+        <div class="fotos-tab-content" id="pettab-contactadas">
+          <div class="pet-card contactada">
+            <div class="pet-top">
+              <div class="pet-main">
+                <div class="pet-pieza">Retrovisor izquierdo · Peugeot 308 <span class="pet-tag">· contactada por ti</span></div>
+                <div class="pet-detalle">Año 2014 · Eléctrico, color blanco nacarado</div>
+              </div>
+              <span class="pet-fecha">Hace 2 días</span>
+            </div>
+          </div>
+          <div class="pet-card contactada">
+            <div class="pet-top">
+              <div class="pet-main">
+                <div class="pet-pieza">Alternador · Volkswagen Golf VII <span class="pet-tag">· contactada por ti</span></div>
+                <div class="pet-detalle">Año 2016 · 1.6 TDI</div>
+              </div>
+              <span class="pet-fecha">Hace 3 días</span>
+            </div>
+          </div>
+          <div class="info-fotos">
+            <strong>Demo:</strong> peticiones que ya marcaste como contactadas. Se guardan aquí por si necesitas retomarlas, sin estorbar en la lista de nuevas.
+          </div>
+        </div>
+
+        <!-- Tab: Archivadas -->
+        <div class="fotos-tab-content" id="pettab-archivadas">
+          <div class="pet-vacio">
+            No tienes peticiones archivadas. Las peticiones antiguas que no gestione nadie se archivarán aquí automáticamente.
+          </div>
+        </div>
+      </div>
+
       <!-- WhatsApp -->
       <div class="box">
         <h3>
@@ -2158,6 +2407,24 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
     el.classList.add('active');
     document.getElementById('vista-masiva').style.display = modo === 'masiva' ? 'block' : 'none';
     document.getElementById('vista-individual').style.display = modo === 'individual' ? 'block' : 'none';
+  }
+
+  // ====== Peticiones de compradores ======
+  function cambiarTabPet(id, btn) {
+    var box = btn.closest('.box');
+    box.querySelectorAll('.fotos-tab').forEach(function (t) { t.classList.remove('active'); });
+    box.querySelectorAll('.fotos-tab-content').forEach(function (c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('pettab-' + id).classList.add('active');
+  }
+
+  function marcarContactada(btn) {
+    var card = btn.closest('.pet-card');
+    card.classList.add('contactada');
+    btn.textContent = 'Contactada ✓';
+    btn.disabled = true;
+    btn.style.textDecoration = 'none';
+    btn.style.cursor = 'default';
   }
 
   // ====== Configuración FTP: selección de archivos (demo simulada) ======

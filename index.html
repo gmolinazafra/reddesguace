@@ -206,6 +206,92 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
 
 </main>
 
+<!-- ====== ¿No encuentras tu recambio? ====== -->
+<section style="background:#E8F1E0; padding:40px 24px; margin-top:24px;">
+  <div style="max-width:760px; margin:0 auto; background:#fff; border-radius:14px; border:1px solid #C0DD97; padding:28px 28px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <h2 style="font-family:'Manrope',sans-serif; font-size:22px; font-weight:700; color:#1B4332; margin:0;">¿No encuentras tu recambio?</h2>
+    </div>
+    <p style="font-size:14px; color:#4A5A4A; line-height:1.6; margin:0 0 22px;">
+      Dinos qué pieza buscas y a qué vehículo pertenece. Tu petición llegará a los 142 desguaces de la red y el que la tenga te contactará directamente por WhatsApp o email. Sin compromiso y sin coste.
+    </p>
+
+    <div id="rec-form">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div>
+          <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Pieza que buscas *</label>
+          <input type="text" id="rec-pieza" placeholder="Ej: Paragolpes delantero" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Marca *</label>
+          <input type="text" id="rec-marca" placeholder="Ej: SEAT" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Modelo</label>
+          <input type="text" id="rec-modelo" placeholder="Ej: León 1P1" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+        </div>
+        <div>
+          <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Año del vehículo</label>
+          <input type="number" id="rec-ano" placeholder="Ej: 2008" min="1980" max="2026" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Detalles (opcional)</label>
+        <textarea id="rec-detalle" rows="2" placeholder="Cualquier detalle que ayude: color, motor, acabado, si lo quieres original..." style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit; resize:vertical;"></textarea>
+      </div>
+
+      <div style="margin-top:18px; padding-top:18px; border-top:1px solid #E0E8D6;">
+        <p style="font-size:12px; color:#4A5A4A; margin:0 0 12px;">¿Cómo quieres que te contacte el desguace? Indica al menos una forma:</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div>
+            <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Tu WhatsApp</label>
+            <input type="tel" id="rec-wa" placeholder="+34 6XX XXX XXX" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+          </div>
+          <div>
+            <label style="display:block; font-size:12px; font-weight:600; color:#1B4332; margin-bottom:5px;">Tu email</label>
+            <input type="email" id="rec-email" placeholder="tucorreo@ejemplo.com" style="width:100%; box-sizing:border-box; padding:10px 12px; border:1px solid #C9D6BE; border-radius:8px; font-size:14px; font-family:inherit;">
+          </div>
+        </div>
+      </div>
+
+      <button onclick="enviarPeticion()" style="margin-top:20px; width:100%; padding:13px; background:#1B4332; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; font-family:inherit;">
+        Enviar petición a los 142 desguaces
+      </button>
+
+      <p style="font-size:11px; color:#7A8A7A; text-align:center; margin:14px 0 0; line-height:1.5;">
+        Demo: el envío es simulado. En producción tu petición llegará al panel de los 142 desguaces y te contactará el que tenga la pieza. Red Desguace solo os pone en contacto: no interviene en la venta.
+      </p>
+    </div>
+
+    <div id="rec-ok" style="display:none; text-align:center; padding:30px 16px;">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#2D6A30" stroke-width="2" style="margin-bottom:12px;"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>
+      <h3 style="font-family:'Manrope',sans-serif; font-size:18px; color:#1B4332; margin:0 0 6px;">¡Petición enviada!</h3>
+      <p style="font-size:14px; color:#4A5A4A; line-height:1.6; margin:0;">Tu solicitud ha llegado a los desguaces de la red. Si alguno tiene la pieza, te contactará directamente por el medio que has indicado.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+function enviarPeticion() {
+  var pieza = document.getElementById('rec-pieza').value.trim();
+  var marca = document.getElementById('rec-marca').value.trim();
+  var wa = document.getElementById('rec-wa').value.trim();
+  var email = document.getElementById('rec-email').value.trim();
+  if (!pieza || !marca) {
+    alert('Indica al menos la pieza que buscas y la marca del vehículo.');
+    return;
+  }
+  if (!wa && !email) {
+    alert('Indica al menos una forma de contacto: WhatsApp o email.');
+    return;
+  }
+  document.getElementById('rec-form').style.display = 'none';
+  document.getElementById('rec-ok').style.display = 'block';
+}
+</script>
+
 <!-- Pie -->
 <footer class="footer">
   <div class="footer-inner">
