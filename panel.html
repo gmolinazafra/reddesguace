@@ -821,6 +821,187 @@
     letter-spacing: 0.5px;
   }
 
+  /* ===================================================
+     CONFIGURACIÓN FTP - SELECCIÓN DE ARCHIVOS
+     =================================================== */
+  .ftp-sel {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .ftp-sel .ftp-sel-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 4px;
+  }
+  .ftp-sel .ftp-sel-head .pill {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: var(--aad-pale);
+    color: var(--aad-dark);
+    margin-left: auto;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  .ftp-sel .ftp-sel-head .pill.ok {
+    background: var(--aad-mid);
+    color: white;
+  }
+  .ftp-sel .ftp-sel-intro {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .ftp-conn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .ftp-conn-grid .fc-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--aad-dark);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .ftp-conn-grid .fc-field input {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    font-size: 13px;
+    background: white;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .ftp-conn-grid .fc-field input:focus {
+    outline: none;
+    border-color: var(--aad-mid);
+  }
+  .ftp-test-btn {
+    padding: 10px 18px;
+    background: var(--aad-mid);
+    color: white;
+    border: 1px solid var(--aad-mid);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+  }
+  .ftp-test-btn:hover { background: var(--aad-dark); border-color: var(--aad-dark); }
+  .ftp-test-btn.done { background: var(--aad-dark); border-color: var(--aad-dark); }
+
+  .ftp-files {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-soft);
+    opacity: 0.45;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .ftp-files.activo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .ftp-files .ff-hint {
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .ftp-files .ff-hint svg { flex-shrink: 0; margin-top: 1px; color: var(--aad-mid); }
+  .ftp-sel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .ftp-sel-grid .fs-field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--aad-dark);
+    margin-bottom: 7px;
+  }
+  .ftp-sel-grid .fs-field select {
+    width: 100%;
+    padding: 10px 11px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    background: white;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .ftp-sel-grid .fs-field select:focus {
+    outline: none;
+    border-color: var(--aad-mid);
+  }
+  .ftp-resumen {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--text-mid);
+    line-height: 1.6;
+    background: var(--aad-pale);
+    border-left: 3px solid var(--aad-mid);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 14px;
+  }
+  .ftp-resumen.vacio { display: none; }
+  .ftp-resumen strong { color: var(--aad-dark); }
+  .ftp-save-btn {
+    margin-top: 14px;
+    padding: 10px 18px;
+    background: var(--aad-dark);
+    color: white;
+    border: 1px solid var(--aad-dark);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+  }
+  .ftp-save-btn:hover { background: #0F2920; }
+  .ftp-nota-demo {
+    font-size: 11px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    margin-top: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .ftp-nota-demo svg { flex-shrink: 0; margin-top: 1px; }
+
+  @media (max-width: 900px) {
+    .ftp-conn-grid { grid-template-columns: 1fr; }
+    .ftp-sel-grid { grid-template-columns: 1fr; }
+  }
+
   /* Banner informativo dentro del bloque */
   .info-fotos {
     background: var(--aad-pale);
@@ -1390,6 +1571,96 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
           <div class="text">Arrastra aquí tu archivo o <a>selecciónalo desde el ordenador</a></div>
           <div class="hint">Formatos aceptados: CSV, XLS, XLSX · Tamaño máximo 50 MB</div>
         </div>
+
+        <!-- ====== Configuración FTP: selección de archivos ====== -->
+        <div class="ftp-sel">
+          <div class="ftp-sel-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2" ry="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/></svg>
+            Conexión FTP y selección de archivos
+            <span class="pill ok" id="ftp-pill">Configurado</span>
+          </div>
+          <div class="ftp-sel-intro">
+            Conecta el FTP donde tu programa de gestión deja los archivos. Solo se configura una vez: Red Desguace recordará qué archivo es el de vehículos y cuál el de stock, e ignorará los demás.
+          </div>
+
+          <div class="ftp-conn-grid">
+            <div class="fc-field">
+              <label>Servidor FTP</label>
+              <input type="text" value="ftp.reciclacat.com">
+            </div>
+            <div class="fc-field">
+              <label>Carpeta</label>
+              <input type="text" value="/">
+            </div>
+            <div class="fc-field">
+              <label>Usuario</label>
+              <input type="text" value="reciclacat">
+            </div>
+            <div class="fc-field">
+              <label>Contraseña</label>
+              <input type="password" value="********">
+            </div>
+          </div>
+
+          <button class="ftp-test-btn done" id="ftp-test" onclick="ftpProbar()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Conexión correcta · 5 archivos encontrados
+          </button>
+
+          <div class="ftp-files activo" id="ftp-files">
+            <div class="ff-hint">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Tu FTP tiene varios archivos. Indica cuál es el de vehículos y cuál el de stock. Los demás se ignoran automáticamente.</span>
+            </div>
+
+            <div class="ftp-sel-grid">
+              <div class="fs-field">
+                <label>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                  Archivo de VEHÍCULOS
+                </label>
+                <select id="sel-veh" onchange="ftpResumen()">
+                  <option value="">Selecciona el archivo…</option>
+                  <option value="crvnet_export_stock.csv">crvnet_export_stock.csv</option>
+                  <option value="crvnet_export_stock2.csv">crvnet_export_stock2.csv</option>
+                  <option value="crvnet_export_vehiculos.csv">crvnet_export_vehiculos.csv</option>
+                  <option value="crvnet_export_vehiculos2.csv">crvnet_export_vehiculos2.csv</option>
+                  <option value="vehiculos_actualizados_bastidores.csv" selected>vehiculos_actualizados_bastidores.csv</option>
+                </select>
+              </div>
+              <div class="fs-field">
+                <label>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.29 7 12 12l8.71-5M12 22V12"/></svg>
+                  Archivo de STOCK (piezas)
+                </label>
+                <select id="sel-stk" onchange="ftpResumen()">
+                  <option value="">Selecciona el archivo…</option>
+                  <option value="crvnet_export_stock.csv" selected>crvnet_export_stock.csv</option>
+                  <option value="crvnet_export_stock2.csv">crvnet_export_stock2.csv</option>
+                  <option value="crvnet_export_vehiculos.csv">crvnet_export_vehiculos.csv</option>
+                  <option value="crvnet_export_vehiculos2.csv">crvnet_export_vehiculos2.csv</option>
+                  <option value="vehiculos_actualizados_bastidores.csv">vehiculos_actualizados_bastidores.csv</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="ftp-resumen" id="ftp-resumen">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align:-2px; color:var(--aad-mid);"><polyline points="20 6 9 17 4 12"/></svg>
+              Vehículos: <strong>vehiculos_actualizados_bastidores.csv</strong> · Stock: <strong>crvnet_export_stock.csv</strong> · Los otros 3 archivos se ignoran.
+            </div>
+
+            <button class="ftp-save-btn" id="ftp-save" onclick="ftpGuardar()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Guardar configuración
+            </button>
+          </div>
+
+          <div class="ftp-nota-demo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Demo: la conexión que se muestra es simulada (un navegador no puede conectarse a un FTP directamente, es una norma de seguridad de todos los navegadores). En producción la conexión será real, hecha desde el servidor, y la lista de archivos se leerá automáticamente de tu FTP.</span>
+          </div>
+        </div>
+        <!-- ====== Fin configuración FTP ====== -->
       </div>
 
       <!-- Mapeo de columnas -->
@@ -1888,6 +2159,64 @@ document.querySelectorAll('.topbar-nav a').forEach(a => {
     document.getElementById('vista-masiva').style.display = modo === 'masiva' ? 'block' : 'none';
     document.getElementById('vista-individual').style.display = modo === 'individual' ? 'block' : 'none';
   }
+
+  // ====== Configuración FTP: selección de archivos (demo simulada) ======
+  // Lista de archivos que en producción se leería automáticamente del FTP.
+  var ftpArchivosSimulados = [
+    "crvnet_export_stock.csv",
+    "crvnet_export_stock2.csv",
+    "crvnet_export_vehiculos.csv",
+    "crvnet_export_vehiculos2.csv",
+    "vehiculos_actualizados_bastidores.csv"
+  ];
+
+  function ftpProbar() {
+    var btn = document.getElementById('ftp-test');
+    var zona = document.getElementById('ftp-files');
+    var pill = document.getElementById('ftp-pill');
+    btn.innerHTML = 'Conectando…';
+    btn.classList.remove('done');
+    setTimeout(function () {
+      btn.classList.add('done');
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Conexión correcta · ' + ftpArchivosSimulados.length + ' archivos encontrados';
+      zona.classList.add('activo');
+      pill.textContent = 'Conexión correcta';
+      pill.classList.add('ok');
+      ftpResumen();
+    }, 900);
+  }
+
+  function ftpResumen() {
+    var v = document.getElementById('sel-veh').value;
+    var s = document.getElementById('sel-stk').value;
+    var box = document.getElementById('ftp-resumen');
+    if (v && s) {
+      var ignorados = ftpArchivosSimulados.filter(function (f) { return f !== v && f !== s; }).length;
+      box.classList.remove('vacio');
+      box.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="vertical-align:-2px; color:var(--aad-mid);"><polyline points="20 6 9 17 4 12"></polyline></svg> Vehículos: <strong>' + v + '</strong> · Stock: <strong>' + s + '</strong> · Los otros ' + ignorados + ' archivos se ignoran.';
+    } else {
+      box.classList.add('vacio');
+    }
+  }
+
+  function ftpGuardar() {
+    var v = document.getElementById('sel-veh').value;
+    var s = document.getElementById('sel-stk').value;
+    var pill = document.getElementById('ftp-pill');
+    var btn = document.getElementById('ftp-save');
+    if (!v || !s) {
+      alert('Selecciona el archivo de vehículos y el de stock antes de guardar.');
+      return;
+    }
+    if (v === s) {
+      alert('El archivo de vehículos y el de stock no pueden ser el mismo.');
+      return;
+    }
+    pill.textContent = 'Configurado y guardado';
+    pill.classList.add('ok');
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Configuración guardada';
+  }
+
 </script>
 
 </body>
